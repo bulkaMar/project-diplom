@@ -1,0 +1,151 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
+  engineType    = "library"
+}
+
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  passwordHash        String?
+  googleId            String?              @unique
+  name                String?
+  role                Role                 @default(APPLICANT)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  progress            Progress[]
+  submissions         Submission[]
+  passwordResetTokens PasswordResetToken[]
+  reviews             Review[]
+  groups              Group[]              @relation("UserGroups")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String?
+  published   Boolean  @default(false)
+  modules     Module[]
+  reviews     Review[]
+  groups      Group[]  @relation("CourseGroups")
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  users     User[]   @relation("UserGroups")
+  courses   Course[] @relation("CourseGroups")
+}
+
+model Module {
+  id          String   @id @default(uuid())
+  title       String
+  orderIndex  Int
+  description String?
+  courseId    String
+  lessons     Lesson[]
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Lesson {
+  id          String       @id @default(uuid())
+  title       String
+  slug        String       @unique
+  orderIndex  Int
+  content     String
+  type        LessonType
+  difficulty  Difficulty   @default(BASIC)
+  moduleId    String
+  initialCode String?
+  testCases   Json?
+  module      Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress    Progress[]
+  submissions Submission[]
+}
+
+model Submission {
+  id              String           @id @default(uuid())
+  code            String
+  status          SubmissionStatus @default(PENDING)
+  output          String?
+  hint            String?
+  executionTimeMs Int?
+  createdAt       DateTime         @default(now())
+  userId          String
+  lessonId        String
+  lesson          Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user            User             @relation(fields: [userId], references: [id])
+}
+
+model Progress {
+  id        String  @id @default(uuid())
+  completed Boolean @default(false)
+  score     Int?
+  userId    String
+  lessonId  String
+  lesson    Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id])
+
+  @@unique([userId, lessonId])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int      // 1-5
+  comment   String?
+  createdAt DateTime @default(now())
+  userId    String
+  courseId  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+enum Role {
+  APPLICANT
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum LessonType {
+  THEORY
+  PRACTICE
+  QUIZ
+}
+
+enum Difficulty {
+  BASIC
+  STANDARD
+  ADVANCED
+}
+
+enum SubmissionStatus {
+  PENDING
+  PASSED
+  FAILED
+  ERROR
+}
+
+model SystemConfig {
+  id                 String  @id @default("global")
+  geminiApiKey       String?
+  adviceSystemActive Boolean @default(true)
+}

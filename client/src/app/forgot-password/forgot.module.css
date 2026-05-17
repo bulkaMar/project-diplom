@@ -1,0 +1,54 @@
+.successBox {
+    text-align: center;
+    padding: 1rem 0;
+    color: #a4abc0;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.successBox p {
+    margin: 0 0 1rem;
+}
+
+.successBox strong {
+    color: #dfe5fc;
+}
+
+.noteText {
+    font-size: 0.8rem;
+    color: #6e7589;
+}
+
+.backLink {
+    color: #86adff;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: #6f9fff;
+}
+
+.successIcon {
+    margin-bottom: 1.5rem;
+    color: #4ade80;
+}
+
+.strengthBar {
+    height: 4px;
+    border-radius: 2px;
+    background: #1b253c;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strengthFill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s, background 0.3s;
+}

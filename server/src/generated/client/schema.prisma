@@ -1,0 +1,109 @@
+generator client {
+  provider      = "prisma-client-js"
+  engineType    = "library"
+  binaryTargets = ["native", "darwin-arm64"]
+  output        = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  APPLICANT
+  STUDENT
+  ADMIN
+}
+
+enum LessonType {
+  THEORY
+  PRACTICE
+  QUIZ
+}
+
+enum SubmissionStatus {
+  PENDING
+  PASSED
+  FAILED
+  ERROR
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         Role     @default(APPLICANT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  submissions Submission[]
+  progress    Progress[]
+}
+
+model Course {
+  id          String  @id @default(uuid())
+  title       String
+  slug        String  @unique
+  description String?
+  published   Boolean @default(false)
+
+  modules Module[]
+}
+
+model Module {
+  id          String  @id @default(uuid())
+  title       String
+  orderIndex  Int
+  description String?
+  courseId    String
+  course      Course  @relation(fields: [courseId], references: [id])
+
+  lessons Lesson[]
+}
+
+model Lesson {
+  id         String     @id @default(uuid())
+  title      String
+  slug       String     @unique
+  orderIndex Int
+  content    String     @db.Text // Markdown content
+  type       LessonType
+  moduleId   String
+  module     Module     @relation(fields: [moduleId], references: [id])
+
+  // For practice
+  initialCode String? @db.Text
+  testCases   Json? // In/Out pairs for checking
+
+  submissions Submission[]
+  progress    Progress[]
+}
+
+model Submission {
+  id              String           @id @default(uuid())
+  code            String           @db.Text
+  status          SubmissionStatus @default(PENDING)
+  output          String?          @db.Text
+  executionTimeMs Int?
+  createdAt       DateTime         @default(now())
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+}
+
+model Progress {
+  id        String  @id @default(uuid())
+  completed Boolean @default(false)
+  score     Int?
+
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+}

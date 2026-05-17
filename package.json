@@ -1,0 +1,15 @@
+{
+    "name": "cpp-educational-platform",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev:client": "npm run dev --workspace=client",
+        "dev:server": "npm run start:dev --workspace=server",
+        "install:all": "npm install --workspaces",
+        "build:all": "npm run build --workspaces"
+    },
+    "workspaces": [
+        "client",
+        "server"
+    ]
+}

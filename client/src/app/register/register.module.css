@@ -1,0 +1,441 @@
+/* ============================================
+   Register Page — CSS Module
+   ============================================ */
+
+/* Design tokens */
+:root {
+  --bg: #070e1e;
+  --surface: #11192d;
+  --surface-high: #161f34;
+  --primary: #86adff;
+  --primary-dim: #026fef;
+  --on-surface: #dfe5fc;
+  --on-surface-variant: #a4abc0;
+  --outline: #6e7589;
+  --outline-variant: #41485a;
+  --error: #ff716c;
+  --on-primary: #002c67;
+}
+
+/* Page wrapper */
+.page {
+  background-color: var(--bg);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient background blobs */
+.bgBlob1 {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: rgba(134, 173, 255, 0.08);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.bgBlob2 {
+  position: absolute;
+  bottom: -10%;
+  right: -10%;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: rgba(129, 151, 255, 0.05);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* Main container */
+.container {
+  width: 100%;
+  max-width: 512px;
+  z-index: 10;
+  padding: 3rem 1.5rem;
+}
+
+/* Glass card */
+.card {
+  background: rgba(17, 25, 45, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(134, 173, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 0 40px rgba(43, 127, 255, 0.15);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 3rem;
+  }
+}
+
+/* Brand anchor */
+.brandHeader {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.brandName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+}
+
+.brandTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0 0 0.75rem;
+}
+
+.brandSubtitle {
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Error message */
+.errorBox {
+  background: rgba(255, 113, 108, 0.1);
+  border: 1px solid rgba(255, 113, 108, 0.2);
+  color: var(--error);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Field group */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--outline);
+  padding-left: 0.25rem;
+}
+
+/* Input wrapper with icon */
+.inputWrapper {
+  position: relative;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--outline);
+  font-size: 1.125rem !important;
+  transition: color 0.2s;
+  pointer-events: none;
+}
+
+.inputWrapper:focus-within .inputIcon {
+  color: var(--primary);
+}
+
+.input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(65, 72, 90, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: rgba(110, 117, 137, 0.4);
+}
+
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* Two-column grid for passwords */
+.passwordGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .passwordGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Submit button */
+.submitBtn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+  color: var(--on-primary);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(134, 173, 255, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+
+.submitBtn:hover {
+  box-shadow: 0 8px 32px rgba(134, 173, 255, 0.2);
+  transform: scale(1.01);
+}
+
+.submitBtn:active {
+  transform: scale(0.98);
+}
+
+/* Divider */
+.divider {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.dividerInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.dividerLine {
+  width: 100%;
+  border: none;
+  border-top: 1px solid rgba(65, 72, 90, 0.2);
+}
+
+.dividerLabelWrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.dividerLabel {
+  background: #11192d;
+  padding: 0 1rem;
+  color: var(--outline);
+}
+
+/* Social buttons */
+.socialGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.socialBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid rgba(65, 72, 90, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.socialBtn:hover {
+  background: var(--surface-high);
+}
+
+.socialBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.socialBtnFull {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid rgba(65, 72, 90, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.socialBtnFull:hover {
+  background: var(--surface-high);
+  border-color: rgba(134, 173, 255, 0.2);
+}
+
+.socialSvg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--on-surface);
+  transition: fill 0.2s;
+}
+
+.socialBtn:hover .socialSvg {
+  fill: var(--primary);
+}
+
+.socialLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Footer link */
+.footerText {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.footerP {
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+}
+
+.footerLink {
+  color: var(--primary);
+  font-weight: 600;
+  margin-left: 0.25rem;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+  text-decoration-color: rgba(134, 173, 255, 0.3);
+  text-underline-offset: 4px;
+}
+
+/* Security badges */
+.securityBadges {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  opacity: 0.4;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badgeText {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  background: var(--bg);
+  border-top: 1px solid rgba(65, 72, 90, 0.15);
+  width: 100%;
+  padding: 3rem 2rem;
+}
+
+.footerInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .footerInner {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.footerBrand {
+  color: var(--primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 2rem;
+}
+
+.footerNavLink {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--outline);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footerNavLink:hover {
+  color: var(--primary);
+}
+
+.footerCopy {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--outline);
+}

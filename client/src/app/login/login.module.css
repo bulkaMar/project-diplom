@@ -1,0 +1,370 @@
+/* ============================================
+   Login Page — CSS Module
+   ============================================ */
+
+/* Design tokens */
+:root {
+  --bg: #070e1e;
+  --surface: #11192d;
+  --surface-high: #161f34;
+  --surface-highest: #1b253c;
+  --primary: #86adff;
+  --primary-dim: #026fef;
+  --secondary: #8197ff;
+  --on-surface: #dfe5fc;
+  --on-surface-variant: #a4abc0;
+  --outline: #6e7589;
+  --outline-variant: #41485a;
+  --error: #ff716c;
+  --on-primary: #002c67;
+}
+
+/* Page wrapper */
+.page {
+  background-color: var(--bg);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient background blobs */
+.bgBlob1 {
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: rgba(2, 111, 239, 0.08);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.bgBlob2 {
+  position: absolute;
+  bottom: -20%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background: rgba(34, 61, 161, 0.08);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.bgGrid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  background-image: radial-gradient(#86adff 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* Main container */
+.container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  padding: 3rem 1.5rem;
+}
+
+/* Brand header */
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}
+
+.subtitle {
+  color: var(--on-surface-variant);
+  margin-top: 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* Glass card */
+.card {
+  background: rgba(27, 37, 60, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(111, 159, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow: 0 0 80px rgba(7, 14, 30, 0.5);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 2.5rem;
+  }
+}
+
+/* Error message */
+.errorBox {
+  background: rgba(255, 113, 108, 0.1);
+  border: 1px solid rgba(255, 113, 108, 0.2);
+  color: var(--error);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Field group */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+}
+
+.forgotLink {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.forgotLink:hover {
+  color: #6f9fff;
+}
+
+/* Input wrapper with icon */
+.inputWrapper {
+  position: relative;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--outline);
+  font-size: 1.25rem !important;
+  transition: color 0.2s;
+  pointer-events: none;
+}
+
+.inputWrapper:focus-within .inputIcon {
+  color: var(--primary);
+}
+
+.input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(65, 72, 90, 0.2);
+  border-radius: 0.5rem;
+  padding: 1rem 1rem 1rem 3rem;
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+}
+
+.input::placeholder {
+  color: rgba(110, 117, 137, 0.5);
+}
+
+.input:focus {
+  border-color: rgba(134, 173, 255, 0.5);
+  box-shadow: 0 0 0 1px rgba(134, 173, 255, 0.5);
+}
+
+/* Submit button */
+.submitBtn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+  color: var(--on-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(2, 111, 239, 0.2);
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+
+.submitBtn:hover {
+  box-shadow: 0 8px 32px rgba(2, 111, 239, 0.4);
+}
+
+.submitBtn:active {
+  transform: scale(0.96);
+}
+
+/* Divider */
+.divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 2.5rem 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(65, 72, 90, 0.15);
+}
+
+.dividerLabel {
+  flex-shrink: 0;
+  margin: 0 1rem;
+  font-size: 0.7rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--outline);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Social buttons */
+.socialGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.socialBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid rgba(65, 72, 90, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.socialBtn:hover {
+  background: var(--surface-high);
+}
+
+.socialBtn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.socialBtnFull {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid rgba(65, 72, 90, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.socialBtnFull:hover {
+  background: var(--surface-high);
+  border-color: rgba(134, 173, 255, 0.2);
+}
+
+.socialIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.socialBtn:hover .socialIcon {
+  opacity: 1;
+}
+
+.socialIconInvert {
+  filter: invert(1);
+}
+
+.socialLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  transition: color 0.2s;
+}
+
+.socialBtn:hover .socialLabel {
+  color: var(--on-surface);
+}
+
+/* Footer link */
+.footerText {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+}
+
+.footerLink {
+  color: var(--primary);
+  font-weight: 700;
+  margin-left: 0.25rem;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}

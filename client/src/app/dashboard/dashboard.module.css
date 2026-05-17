@@ -1,0 +1,801 @@
+/* ============================================
+   Dashboard Page — CSS Module
+   ============================================ */
+
+:root {
+  --bg: #070e1e;
+  --surface: #070e1e;
+  --surface-low: #0b1325;
+  --surface-container: #11192d;
+  --surface-high: #161f34;
+  --surface-highest: #1b253c;
+  --surface-bright: #212c45;
+  --primary: #86adff;
+  --primary-dim: #026fef;
+  --secondary: #8197ff;
+  --on-surface: #dfe5fc;
+  --on-surface-variant: #a4abc0;
+  --outline: #6e7589;
+  --outline-variant: #41485a;
+  --on-primary: #002c67;
+}
+
+/* ---- Page ---- */
+.page {
+  background-color: var(--bg);
+  color: var(--on-surface);
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 8rem;
+}
+
+/* ---- Hero Section ---- */
+.simpleHeader {
+  padding: 3rem 0 0;
+  background: linear-gradient(180deg, rgba(134, 173, 255, 0.05) 0%, transparent 100%);
+}
+
+.welcomeTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.welcomeSubtitle {
+  font-size: 1rem;
+  color: var(--outline);
+  font-weight: 500;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gridContainer {
+  margin-top: 0.5rem;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 2.5rem 2rem;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding: 3.5rem 2rem;
+  }
+}
+
+.heroBlob1 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateY(-50%) translateX(25%);
+  width: 600px;
+  height: 600px;
+  background: rgba(134, 173, 255, 0.08);
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.heroBlob2 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateY(50%) translateX(-25%);
+  width: 400px;
+  height: 400px;
+  background: rgba(129, 151, 255, 0.05);
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.heroInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+/* Progress Ring */
+.progressWrap {
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progressRingContainer {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .progressRingContainer {
+    width: 10rem;
+    height: 10rem;
+  }
+}
+
+.progressSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progressInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressPercent {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  line-height: 1;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .progressPercent {
+    font-size: 2.5rem;
+  }
+}
+
+.progressLabel {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--outline);
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.welcomeMsg {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.8;
+}
+
+/* Hero title */
+.heroTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--on-surface);
+  margin: 0 0 1.5rem;
+  line-height: 1.1;
+}
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+}
+
+.heroAccent {
+  color: var(--primary);
+  font-style: italic;
+}
+
+.heroSubtitle {
+  font-size: 1.1rem;
+  color: var(--on-surface-variant);
+  max-width: 42rem;
+  margin: 0 0 3rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 768px) {
+  .heroSubtitle {
+    font-size: 1.25rem;
+  }
+}
+
+/* CTA buttons */
+.ctaRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .ctaRow {
+    flex-direction: row;
+    width: auto;
+  }
+}
+
+.btnPrimary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+  color: var(--on-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.15s;
+  text-decoration: none;
+}
+
+.btnPrimary:hover {
+  box-shadow: 0 0 30px -5px rgba(134, 173, 255, 0.4);
+}
+
+.btnPrimary:active {
+  transform: scale(0.95);
+}
+
+.btnPrimaryIcon {
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+
+.btnPrimary:hover .btnPrimaryIcon {
+  transform: translateX(4px);
+}
+
+.btnSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2.5rem;
+  border: 1px solid rgba(110, 117, 137, 0.2);
+  color: var(--primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+}
+
+.btnSecondary:hover {
+  background: var(--surface-high);
+}
+
+.btnSecondary:active {
+  transform: scale(0.95);
+}
+
+/* ---- Courses Section ---- */
+.section {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+.sectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0 0 1.5rem;
+}
+
+/* ---- Course Cards Grid ---- */
+.coursesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .coursesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .coursesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1100px;
+  }
+}
+
+/* Single course: center it */
+.coursesGridSingle {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  justify-items: center;
+}
+
+@media (min-width: 768px) {
+  .coursesGridSingle {
+    grid-template-columns: minmax(0, 640px);
+    justify-content: center;
+  }
+}
+
+/* ---- Bento Grid (last lesson + next up) ---- */
+.bentoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .bentoGrid {
+    grid-template-columns: 7fr 5fr;
+  }
+}
+
+/* Last Lesson card */
+.lastLessonCard {
+  background: var(--surface-low);
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.lastLessonBg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2rem;
+  opacity: 0.08;
+  font-size: 6rem;
+  line-height: 1;
+  color: var(--on-surface);
+  transition: opacity 0.3s;
+  pointer-events: none;
+  font-family: 'Material Symbols Outlined';
+}
+
+.lastLessonCard:hover .lastLessonBg {
+  opacity: 0.18;
+}
+
+.lastLessonLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin: 0 0 1rem;
+}
+
+.lastLessonTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0 0 1.5rem;
+  line-height: 1.3;
+}
+
+.lastLessonMeta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--outline);
+  font-size: 0.875rem;
+}
+
+.metaIcon {
+  font-size: 1.1rem !important;
+}
+
+.progressBar {
+  width: 100%;
+  background: var(--surface-highest);
+  height: 4px;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  background: var(--primary);
+  height: 100%;
+  border-radius: 9999px;
+}
+
+/* Right column bento */
+.bentoRight {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.bentoCard {
+  background: var(--surface-container);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+.bentoCard:hover {
+  background: var(--surface-high);
+}
+
+.bentoIconWrap {
+  padding: 0.75rem;
+  background: var(--surface-bright);
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+
+.bentoIconPrimary {
+  color: var(--primary);
+}
+
+.bentoIconSecondary {
+  color: var(--secondary);
+}
+
+.bentoTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--on-surface);
+  margin: 0 0 0.25rem;
+}
+
+.bentoText {
+  color: var(--on-surface-variant);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ---- Loading skeletons ---- */
+.skeletonWrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 8rem 2rem 2rem;
+}
+
+.skeletonTitle {
+  height: 2.5rem;
+  width: 40%;
+  background: var(--surface-high);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.skeletonCard {
+  height: 300px;
+  background: var(--surface-high);
+  border-radius: 0.75rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ---- Error ---- */
+.errorBox {
+  background: rgba(255, 113, 108, 0.1);
+  border: 1px solid rgba(255, 113, 108, 0.2);
+  color: #ff716c;
+  padding: 1rem 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* ---- Empty state ---- */
+.emptyState {
+  background: var(--surface-container);
+  border-radius: 0.75rem;
+  padding: 3rem;
+  text-align: center;
+  color: var(--on-surface-variant);
+  font-size: 1rem;
+}
+
+/* ---- Footer ---- */
+.footer {
+  background: var(--bg);
+  border-top: 1px solid rgba(65, 72, 90, 0.15);
+}
+
+.footerInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 3rem 2.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .footerInner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.footerBrand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0 0 0.25rem;
+}
+
+.footerCopy {
+  color: var(--outline);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 2rem;
+}
+
+.footerLink {
+  color: var(--outline);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footerLink:hover {
+  color: var(--primary);
+}
+
+/* ---- Course Overview Modal ---- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 14, 30, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1200;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalBox {
+  background: #0e1729;
+  border: 1px solid rgba(134, 173, 255, 0.12);
+  border-radius: 1rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modalClose {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  color: var(--outline);
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.modalClose:hover {
+  color: var(--on-surface);
+}
+
+.modalBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  background: rgba(129, 151, 255, 0.1);
+  border: 1px solid rgba(129, 151, 255, 0.2);
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.modalTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin: 0 0 0.75rem;
+  line-height: 1.25;
+  padding-right: 2rem;
+}
+
+.modalDesc {
+  color: var(--on-surface-variant);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0 0 2rem;
+}
+
+.modalDivider {
+  height: 1px;
+  background: rgba(65, 72, 90, 0.3);
+  margin: 1.5rem 0;
+}
+
+.modalSection {
+  margin-bottom: 1.75rem;
+}
+
+.modalSectionTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--outline);
+  margin: 0 0 1rem;
+}
+
+.modalList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.modalListItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: var(--on-surface-variant);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.modalListIcon {
+  color: var(--primary);
+  flex-shrink: 0;
+  font-size: 1.1rem !important;
+  margin-top: 1px;
+}
+
+.modalStatsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.modalStat {
+  background: var(--surface-container);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.modalStatValue {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.375rem;
+}
+
+.modalStatLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--outline);
+}
+
+.modalCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+  color: var(--on-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.15s;
+  margin-top: 0.5rem;
+}
+
+.modalCta:hover {
+  box-shadow: 0 0 24px -4px rgba(134, 173, 255, 0.4);
+}
+
+.modalCta:active {
+  transform: scale(0.97);
+}
