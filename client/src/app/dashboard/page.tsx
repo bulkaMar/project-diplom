@@ -18,9 +18,9 @@ export default function DashboardPage() {
     // Aggregate progress across all courses
     const overallProgress = courses.length
         ? Math.round(
-              courses.reduce((acc, c) => acc + (c.progressPercent || 0), 0) /
-                  courses.length
-          )
+            courses.reduce((acc, c) => acc + (c.progressPercent || 0), 0) /
+            courses.length
+        )
         : 0;
 
     // Last accessed course (first one with some progress, or just first)
@@ -35,6 +35,12 @@ export default function DashboardPage() {
 
         if (!authLoading && user?.role === 'ADMIN') {
             router.replace('/dashboard/admin');
+            return;
+        }
+
+
+        if (!authLoading && user?.role === 'TEACHER') {
+            router.replace('/dashboard/editor');
             return;
         }
 
@@ -95,7 +101,7 @@ export default function DashboardPage() {
                     <p className={styles.welcomeSubtitle}>
                         Продовжуйте своє навчання та вдосконалюйте навички C++.
                     </p>
-                    
+
                     <h2 className={styles.sectionTitle}>Ваші курси</h2>
 
                     {/* Grid immediately below */}
@@ -108,7 +114,7 @@ export default function DashboardPage() {
                             </div>
                         ) : (
                             <div className={styles.emptyState}>
-                                Ви ще не зараховані на жоден курс. 
+                                Ви ще не зараховані на жоден курс.
                                 Зверніться до викладача для отримання доступу.
                             </div>
                         )}

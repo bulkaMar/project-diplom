@@ -19,6 +19,21 @@ interface Stats {
     avgScore: number;
 }
 
+interface TeacherCourse {
+    id: string;
+    title: string;
+    published: boolean;
+    modulesCount: number;
+    studentsCount: number;
+}
+
+interface TeacherStats {
+    totalCourses: number;
+    publishedCourses: number;
+    totalStudents: number;
+    courses: TeacherCourse[];
+}
+
 interface AdminConfig {
     geminiApiKey: string;
     adviceSystemActive: boolean;
@@ -31,8 +46,11 @@ export default function ProfilePage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [saveError, setSaveError] = useState('');
     const [stats, setStats] = useState<Stats | null>(null);
     const [statsLoading, setStatsLoading] = useState(true);
+    const [teacherStats, setTeacherStats] = useState<TeacherStats | null>(null);
+    const [teacherStatsLoading, setTeacherStatsLoading] = useState(true);
     const [adminConfig, setAdminConfig] = useState<AdminConfig | null>(null);
     const [configLoading, setConfigLoading] = useState(false);
 
@@ -47,6 +65,8 @@ export default function ProfilePage() {
             setEmail(user.email);
             if (user.role === 'ADMIN') {
                 fetchAdminConfig();
+            } else if (user.role === 'TEACHER') {
+                fetchTeacherStats();
             } else {
                 fetchStats();
             }
@@ -66,6 +86,19 @@ export default function ProfilePage() {
         }
     };
 
+    const fetchTeacherStats = async () => {
+        if (!token) return;
+        setTeacherStatsLoading(true);
+        try {
+            const data = await api.get<TeacherStats>('/auth/teacher-stats', token);
+            setTeacherStats(data);
+        } catch (err) {
+            console.error('Failed to fetch teacher stats', err);
+        } finally {
+            setTeacherStatsLoading(false);
+        }
+    };
+
     const fetchStats = async () => {
         if (!token) return;
         try {
@@ -81,7 +114,8 @@ export default function ProfilePage() {
     const handleSave = async () => {
         if (!token || !user) return;
         setIsLoading(true);
-        
+        setSaveError('');
+
         const updateData: any = {};
         if (name !== user.name) updateData.name = name;
         if (email !== user.email) updateData.email = email;
@@ -98,8 +132,7 @@ export default function ProfilePage() {
             setIsEditing(false);
         } catch (err: any) {
             console.error('Failed to update profile', err);
-            const msg = err.response?.data?.message || 'Помилка при оновленні профілю';
-            alert(msg);
+            setSaveError(err.message || 'Помилка при оновленні профілю');
         } finally {
             setIsLoading(false);
         }
@@ -237,6 +270,7 @@ export default function ProfilePage() {
                                     className={styles.cancelBtn} 
                                     onClick={() => {
                                         setIsEditing(false);
+                                        setSaveError('');
                                         setName(user.name || '');
                                         setEmail(user.email);
                                     }}
@@ -245,8 +279,28 @@ export default function ProfilePage() {
                                     Скасувати
                                 </button>
                             </div>
+                            {saveError && (
+                                <div style={{
+                                    marginTop: '0.75rem',
+                                    padding: '0.625rem 0.875rem',
+                                    borderRadius: '0.5rem',
+                                    background: 'rgba(239,68,68,0.08)',
+                                    border: '1px solid rgba(239,68,68,0.25)',
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: '0.5rem',
+                                }}>
+                                    <span style={{ color: '#ef4444', fontSize: '1rem', lineHeight: 1, flexShrink: 0 }}>⚠</span>
+                                    <span style={{ color: '#fca5a5', fontSize: '0.8rem', lineHeight: 1.5 }}>{saveError}</span>
+                                    <button
+                                        onClick={() => setSaveError('')}
+                                        style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, flexShrink: 0 }}
+                                    >✕</button>
+                                </div>
+                            )}
                         </div>
                     )}
+
                 </section>
 
                 {/* Right Card: Stats or Admin Settings */}
@@ -307,6 +361,71 @@ export default function ProfilePage() {
                                 <Typography color="error" variant="body2">Не вдалося завантажити налаштування</Typography>
                             )}
                         </>
+                    ) : user.role === 'TEACHER' ? (
+                        <>
+                            <h3 className={styles.cardTitle}>
+                                <AccountCircleIcon sx={{ color: '#8197ff' }} />
+                                Мої курси та студенти
+                            </h3>
+
+                            {/* Summary tiles */}
+                            {!teacherStatsLoading && teacherStats && (
+                                <div className={styles.statsGrid} style={{ marginBottom: '1.25rem' }}>
+                                    <div className={styles.statItem}>
+                                        <span className={styles.statNumber}>{teacherStats.totalCourses}</span>
+                                        <span className={styles.statLabel}>Всього курсів</span>
+                                    </div>
+                                    <div className={styles.statItem}>
+                                        <span className={styles.statNumber}>{teacherStats.publishedCourses}</span>
+                                        <span className={styles.statLabel}>Опублікованих</span>
+                                    </div>
+                                    <div className={styles.statItem}>
+                                        <span className={styles.statNumber}>{teacherStats.totalStudents}</span>
+                                        <span className={styles.statLabel}>Студентів</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {teacherStatsLoading ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                                    <CircularProgress size={24} />
+                                </Box>
+                            ) : teacherStats?.courses?.length ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    {teacherStats.courses.map(course => (
+                                        <div key={course.id} style={{
+                                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                            padding: '0.6rem 0.875rem', borderRadius: '0.5rem',
+                                            background: 'rgba(134,173,255,0.04)', border: '1px solid rgba(134,173,255,0.08)'
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
+                                                <span style={{
+                                                    fontSize: '0.6rem', fontWeight: 700, padding: '2px 6px',
+                                                    borderRadius: '4px', flexShrink: 0,
+                                                    background: course.published ? 'rgba(16,185,129,0.15)' : 'rgba(100,116,139,0.15)',
+                                                    color: course.published ? '#10b981' : '#64748b',
+                                                }}>
+                                                    {course.published ? 'LIVE' : 'DRAFT'}
+                                                </span>
+                                                <span style={{ fontSize: '0.8rem', color: '#dfe5fc', truncate: true, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                    {course.title}
+                                                </span>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '1rem', flexShrink: 0, marginLeft: '0.5rem' }}>
+                                                <span style={{ fontSize: '0.75rem', color: '#6e7589' }}>
+                                                    {course.modulesCount} мод.
+                                                </span>
+                                                <span style={{ fontSize: '0.75rem', color: '#86adff', fontWeight: 600 }}>
+                                                    👥 {course.studentsCount}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <Typography variant="body2" sx={{ color: '#6e7589' }}>Курсів ще немає. Створіть перший курс в редакторі.</Typography>
+                            )}
+                        </>
                     ) : (
                         <>
                             <h3 className={styles.cardTitle}>
@@ -342,6 +461,7 @@ export default function ProfilePage() {
                             )}
                         </>
                     )}
+
                 </section>
             </div>
         </div>

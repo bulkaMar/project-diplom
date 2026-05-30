@@ -95,7 +95,7 @@ export default function Navbar() {
                                 >
                                     Вийти
                                 </Button>
-                                {user.role !== 'ADMIN' && (
+                                {user.role !== 'ADMIN' && user.role !== 'TEACHER' && (
                                     <Button
                                         component={Link}
                                         href="/dashboard"
@@ -110,9 +110,10 @@ export default function Navbar() {
                                             '&:hover': { bgcolor: '#4338ca' }
                                         }}
                                     >
-                                        {user.role === 'TEACHER' ? 'Моя панель' : 'Моя дошка'}
+                                        Моя дошка
                                     </Button>
                                 )}
+
                             </>
                         ) : (
                             // Only show login/register in header if NOT on home page

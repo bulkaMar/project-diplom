@@ -35,6 +35,7 @@ export default function CourseContentEditor() {
     const [newModuleTitle, setNewModuleTitle] = useState('');
     const [newLessonTitle, setNewLessonTitle] = useState('');
     const [newLessonType, setNewLessonType] = useState('THEORY');
+    const [deleteModuleTarget, setDeleteModuleTarget] = useState<{ id: string; title: string } | null>(null);
 
     // Lesson Data State
     const [theoryContent, setTheoryContent] = useState('');
@@ -195,6 +196,22 @@ export default function CourseContentEditor() {
         } catch (err) { console.error(err); }
     };
 
+    const handleDeleteModule = async (moduleId: string, moduleTitle: string) => {
+        setDeleteModuleTarget({ id: moduleId, title: moduleTitle });
+    };
+
+    const confirmDeleteModule = async () => {
+        if (!deleteModuleTarget) return;
+        try {
+            await axios.delete(`${API_URL}/management/modules/${deleteModuleTarget.id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            fetchCourseData();
+        } catch (err) { console.error(err); } finally {
+            setDeleteModuleTarget(null);
+        }
+    };
+
     const handleCreateLesson = async () => {
         try {
             await axios.post(`${API_URL}/management/modules/${activeModuleId}/lessons`, {
@@ -236,14 +253,24 @@ export default function CourseContentEditor() {
                     <h3 className="text-[10px] font-bold text-outline tracking-widest uppercase px-2 mb-4">Навчальний План</h3>
                     {course.modules?.map((module: any) => (
                         <div key={module.id} className="space-y-1">
-                            <div className="flex items-center justify-between px-2 py-1 group">
-                                <span className="text-xs font-bold text-[#dfe5fc]/70 headline-font truncate w-40">{module.title}</span>
-                                <button 
-                                    onClick={() => { setActiveModuleId(module.id); setIsLessonDialogOpen(true); }}
-                                    className="opacity-100 transition-opacity text-primary hover:text-primary-dim"
-                                >
-                                    <span className="material-symbols-outlined text-sm">add</span>
-                                </button>
+                            <div className="flex items-center justify-between px-2 py-1 group cursor-pointer">
+                                <span className="text-xs font-bold text-[#dfe5fc]/70 headline-font truncate w-32">{module.title}</span>
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        onClick={() => { setActiveModuleId(module.id); setIsLessonDialogOpen(true); }}
+                                        className="opacity-100 transition-opacity text-primary hover:text-primary-dim"
+                                        title="Додати урок"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">add</span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteModule(module.id, module.title)}
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-[#6e7589] hover:text-red-400"
+                                        title="Видалити модуль"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">delete</span>
+                                    </button>
+                                </div>
                             </div>
                             <div className="space-y-0.5">
                                 {module.lessons?.map((lesson: any) => (
@@ -406,6 +433,62 @@ export default function CourseContentEditor() {
                     {snackbar.message}
                 </Alert>
             </Snackbar>
+
+            {/* ── Delete Module Confirmation Dialog ── */}
+            <Dialog
+                open={!!deleteModuleTarget}
+                onClose={() => setDeleteModuleTarget(null)}
+                PaperProps={{
+                    sx: {
+                        bgcolor: '#11192d',
+                        borderRadius: 3,
+                        border: '1px solid rgba(239,68,68,0.2)',
+                        backgroundImage: 'none',
+                        minWidth: 360,
+                        p: 1,
+                    }
+                }}
+            >
+                <DialogTitle sx={{ color: '#fff', fontWeight: 700, pb: 0.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <span style={{ color: '#ef4444', fontSize: '1.25rem' }}>🗑</span>
+                    Видалити модуль?
+                </DialogTitle>
+                <DialogContent sx={{ pt: 1 }}>
+                    <Typography sx={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                        Ви впевнені, що хочете видалити модуль{' '}
+                        <strong style={{ color: '#dfe5fc' }}>"{deleteModuleTarget?.title}"</strong>?
+                    </Typography>
+                    <Box sx={{ mt: 1.5, p: 1.5, borderRadius: 2, bgcolor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
+                        <Typography sx={{ color: '#fca5a5', fontSize: '0.78rem' }}>
+                            ⚠ Всі уроки цього модуля також будуть видалені. Цю дію неможливо скасувати.
+                        </Typography>
+                    </Box>
+                </DialogContent>
+                <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
+                    <Button
+                        onClick={() => setDeleteModuleTarget(null)}
+                        sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600, textTransform: 'none' }}
+                    >
+                        Скасувати
+                    </Button>
+                    <Button
+                        onClick={confirmDeleteModule}
+                        variant="contained"
+                        sx={{
+                            bgcolor: '#ef4444',
+                            color: '#fff',
+                            fontWeight: 700,
+                            textTransform: 'none',
+                            borderRadius: 2,
+                            px: 3,
+                            '&:hover': { bgcolor: '#b91c1c' }
+                        }}
+                    >
+                        Видалити
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </StudioLayout>
+
     );
 }

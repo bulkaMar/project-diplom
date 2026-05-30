@@ -44,7 +44,12 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
                 return {} as T;
             }
         }
-        throw new ApiError(response.status, data.message || 'An error occurred', data);
+        // NestJS ValidationPipe returns message as array — normalize to string
+        const rawMessage = data.message;
+        const normalizedMessage = Array.isArray(rawMessage)
+            ? rawMessage.join(' • ')
+            : rawMessage || 'An error occurred';
+        throw new ApiError(response.status, normalizedMessage, data);
     }
 
     return data as T;
