@@ -407,7 +407,7 @@ export default function ProfilePage() {
                                                 }}>
                                                     {course.published ? 'LIVE' : 'DRAFT'}
                                                 </span>
-                                                <span style={{ fontSize: '0.8rem', color: '#dfe5fc', truncate: true, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                <span style={{ fontSize: '0.8rem', color: '#dfe5fc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {course.title}
                                                 </span>
                                             </div>
