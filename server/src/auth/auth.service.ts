@@ -41,18 +41,16 @@ export class AuthService {
     async register(registerDto: RegisterDto) {
         const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
-        // If group name provided — check it exists in DB
+        // If group name provided — try to find it in DB, skip silently if not found
         let groupConnect: { connect: { name: string } } | undefined;
         if (registerDto.groupName) {
             const group = await this.prisma.group.findUnique({
                 where: { name: registerDto.groupName.toUpperCase() },
             });
-            if (!group) {
-                throw new BadRequestException(
-                    `Групу "${registerDto.groupName}" не знайдено. Зверніться до викладача.`
-                );
+            if (group) {
+                groupConnect = { connect: { name: group.name } };
             }
-            groupConnect = { connect: { name: group.name } };
+            // If group not found — just register without a group, no error
         }
 
         try {
