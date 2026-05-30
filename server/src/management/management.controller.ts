@@ -49,6 +49,11 @@ export class ManagementController {
         return this.managementService.updateModule(id, data);
     }
 
+    @Delete('modules/:id')
+    async deleteModule(@Param('id') id: string) {
+        return this.managementService.deleteModule(id);
+    }
+
     @Post('modules/:moduleId/lessons')
     async createLesson(
         @Param('moduleId') moduleId: string,

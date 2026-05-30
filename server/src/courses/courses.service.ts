@@ -17,19 +17,10 @@ export class CoursesService {
             });
         }
 
-        // Students and Applicants see only published courses assigned to their group
+        // Students and Applicants see all published courses
         return this.prisma.course.findMany({
             where: {
-                published: true,
-                groups: {
-                    some: {
-                        users: {
-                            some: {
-                                id: user.id
-                            }
-                        }
-                    }
-                }
+                published: true
             },
             include: {
                 _count: {

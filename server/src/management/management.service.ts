@@ -72,6 +72,14 @@ export class ManagementService {
         });
     }
 
+    async deleteModule(id: string) {
+        // Lessons cascade-delete via Prisma schema (onDelete: Cascade)
+        return this.prisma.module.delete({
+            where: { id },
+        });
+    }
+
+
     // --- Lessons ---
     async createLesson(moduleId: string, data: { 
         title: string; 

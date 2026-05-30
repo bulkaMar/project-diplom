@@ -40,12 +40,28 @@ export class AuthService {
 
     async register(registerDto: RegisterDto) {
         const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+
+        // If group name provided — check it exists in DB
+        let groupConnect: { connect: { name: string } } | undefined;
+        if (registerDto.groupName) {
+            const group = await this.prisma.group.findUnique({
+                where: { name: registerDto.groupName.toUpperCase() },
+            });
+            if (!group) {
+                throw new BadRequestException(
+                    `Групу "${registerDto.groupName}" не знайдено. Зверніться до викладача.`
+                );
+            }
+            groupConnect = { connect: { name: group.name } };
+        }
+
         try {
             const user = await this.prisma.user.create({
                 data: {
                     email: registerDto.email,
                     passwordHash: hashedPassword,
                     name: registerDto.name,
+                    ...(groupConnect ? { groups: groupConnect } : {}),
                 },
             });
             const { passwordHash, ...result } = user;
@@ -188,5 +204,41 @@ export class AuthService {
         if (!user) return null;
         const { passwordHash, ...result } = user;
         return result;
+    }
+
+    async getTeacherStats() {
+        // All courses with number of enrolled students (via groups)
+        const courses = await this.prisma.course.findMany({
+            select: {
+                id: true,
+                title: true,
+                published: true,
+                _count: {
+                    select: { modules: true },
+                },
+                groups: {
+                    select: {
+                        _count: {
+                            select: { users: true },
+                        },
+                    },
+                },
+            },
+        });
+
+        const coursesWithStudents = courses.map(course => ({
+            id: course.id,
+            title: course.title,
+            published: course.published,
+            modulesCount: course._count.modules,
+            studentsCount: course.groups.reduce((sum, g) => sum + g._count.users, 0),
+        }));
+
+        return {
+            totalCourses: courses.length,
+            publishedCourses: courses.filter(c => c.published).length,
+            totalStudents: coursesWithStudents.reduce((sum, c) => sum + c.studentsCount, 0),
+            courses: coursesWithStudents,
+        };
     }
 }

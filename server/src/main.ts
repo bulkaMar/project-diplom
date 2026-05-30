@@ -1,8 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Global validation pipe — enforces class-validator decorators on all DTOs
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,         // strip unknown fields
+    forbidNonWhitelisted: false,
+    transform: true,
+    stopAtFirstError: false, // collect all errors at once
+  }));
 
   const allowedOrigins: (string | RegExp)[] = [
     'http://localhost:3000',
@@ -31,4 +40,5 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
+
 

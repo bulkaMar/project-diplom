@@ -6,6 +6,9 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -70,5 +73,12 @@ export class AuthController {
     @Get('stats')
     async getStats(@Request() req) {
         return this.authService.getStats(req.user.id);
+    }
+
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles(Role.TEACHER, Role.ADMIN)
+    @Get('teacher-stats')
+    async getTeacherStats() {
+        return this.authService.getTeacherStats();
     }
 }
