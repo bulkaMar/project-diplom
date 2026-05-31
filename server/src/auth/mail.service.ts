@@ -1,33 +1,24 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 @Injectable()
 export class MailService {
     private readonly logger = new Logger(MailService.name);
-    private transporter: nodemailer.Transporter;
+    private resend: Resend;
     private fromAddress: string;
 
     constructor(private configService: ConfigService) {
-        const mailUser = this.configService.get<string>('MAIL_USER');
-        const mailPass = this.configService.get<string>('MAIL_PASS');
-        
-        // Setup Nodemailer transporter for Gmail
-        this.transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: mailUser,
-                pass: mailPass,
-            },
-        });
-        
-        this.fromAddress = mailUser || 'noreply@kinetic.io';
+        const apiKey = this.configService.get<string>('RESEND_API_KEY');
+        this.resend = new Resend(apiKey);
+        // Use verified domain if set, otherwise fall back to resend shared domain
+        this.fromAddress = this.configService.get<string>('MAIL_FROM') || 'onboarding@resend.dev';
     }
 
     async sendPasswordReset(email: string, name: string, resetUrl: string): Promise<void> {
         try {
-            await this.transporter.sendMail({
-                from: `"C++ Платформа" <${this.fromAddress}>`,
+            const { error } = await this.resend.emails.send({
+                from: `C++ Платформа <${this.fromAddress}>`,
                 to: email,
                 subject: 'Скидання пароля — C++ Платформа',
                 html: `
@@ -74,6 +65,11 @@ export class MailService {
                 `,
             });
 
+            if (error) {
+                this.logger.error(`Resend error for ${email}:`, error);
+                throw new Error(error.message);
+            }
+
             this.logger.log(`Password reset email sent to ${email}`);
         } catch (err) {
             this.logger.error(`Failed to send password reset email to ${email}`, err);
@@ -83,8 +79,8 @@ export class MailService {
 
     async sendInvitation(email: string, name: string, setupUrl: string): Promise<void> {
         try {
-            await this.transporter.sendMail({
-                from: `"C++ Платформа" <${this.fromAddress}>`,
+            const { error } = await this.resend.emails.send({
+                from: `C++ Платформа <${this.fromAddress}>`,
                 to: email,
                 subject: 'Запрошення до C++ Платформи',
                 html: `
@@ -130,6 +126,11 @@ export class MailService {
                     </html>
                 `,
             });
+
+            if (error) {
+                this.logger.error(`Resend error for ${email}:`, error);
+                throw new Error(error.message);
+            }
 
             this.logger.log(`Invitation email sent to ${email}`);
         } catch (err) {
