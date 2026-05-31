@@ -67,6 +67,11 @@ export class ManagementController {
         return this.managementService.updateLesson(id, data);
     }
 
+    @Get('students')
+    async getStudents() {
+        return this.managementService.getStudents();
+    }
+
     @Get('groups')
     async getAllGroups() {
         return this.managementService.getAllGroups();

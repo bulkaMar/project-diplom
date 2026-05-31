@@ -107,6 +107,13 @@ export class ManagementService {
     }
 
     // --- Groups ---
+    async getStudents() {
+        return this.prisma.user.findMany({
+            where: { role: Role.APPLICANT },
+            orderBy: { createdAt: 'desc' }
+        });
+    }
+
     async getAllGroups() {
         return this.prisma.group.findMany({
             include: {

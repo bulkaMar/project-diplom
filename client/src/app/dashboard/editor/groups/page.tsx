@@ -40,7 +40,7 @@ export default function GroupManagement() {
         try {
             const [gRes, uRes, cRes] = await Promise.all([
                 axios.get(`${API_URL}/management/groups`, { headers: { Authorization: `Bearer ${token}` } }),
-                axios.get(`${API_URL}/admin/users`, { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get(`${API_URL}/management/students`, { headers: { Authorization: `Bearer ${token}` } }),
                 axios.get(`${API_URL}/management/courses`, { headers: { Authorization: `Bearer ${token}` } })
             ]);
             setGroups(gRes.data);
