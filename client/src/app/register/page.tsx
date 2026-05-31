@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 
@@ -18,8 +18,7 @@ import styles from './register.module.css';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-// Suggested groups for autocomplete
-const GROUP_SUGGESTIONS = ['ІПЗ-13', 'ІПЗ-23', 'ІПЗ-33', 'ІПЗ-43'];
+// Groups will be fetched dynamically
 
 // ─── Validation helpers ───────────────────────────────────────────────────────
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -50,7 +49,7 @@ function validateConfirm(password: string, confirm: string) {
     return '';
 }
 function validateGroup(v: string) {
-    if (!v) return 'Введіть номер групи';
+    if (!v) return ''; // Optional
     if (!GROUP_REGEX.test(v.trim())) return 'Формат: ІПЗ-13 (літери-цифри)';
     return '';
 }
@@ -80,6 +79,14 @@ export default function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [groupName, setGroupName] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [groups, setGroups] = useState<string[]>([]);
+
+    useEffect(() => {
+        fetch(`${API_URL}/auth/groups`)
+            .then(res => res.json())
+            .then(data => setGroups(data.map((g: any) => g.name)))
+            .catch(err => console.error('Failed to fetch groups', err));
+    }, []);
 
     const [touched, setTouched] = useState({ name: false, email: false, password: false, confirm: false, group: false });
     const [submitError, setSubmitError] = useState('');
@@ -113,7 +120,7 @@ export default function RegisterPage() {
     const touch = (field: keyof typeof touched) =>
         setTouched(prev => ({ ...prev, [field]: true }));
 
-    const filteredSuggestions = GROUP_SUGGESTIONS.filter(g =>
+    const filteredSuggestions = groups.filter(g =>
         g.toLowerCase().includes(groupName.toLowerCase()) && g !== groupName
     );
 

@@ -18,6 +18,12 @@ export class AuthService {
         private mailService: MailService,
     ) { }
 
+    async getGroups() {
+        return this.prisma.group.findMany({
+            orderBy: { name: 'asc' }
+        });
+    }
+
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.prisma.user.findUnique({ where: { email } });
         if (user && user.passwordHash && (await bcrypt.compare(pass, user.passwordHash))) {

@@ -17,6 +17,11 @@ export class AuthController {
         private configService: ConfigService,
     ) { }
 
+    @Get('groups')
+    async getGroups() {
+        return this.authService.getGroups();
+    }
+
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
         return this.authService.login(loginDto);
