@@ -5,9 +5,8 @@ import { Grid, Paper, Typography, Box, CircularProgress, alpha } from '@mui/mate
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { 
-    People as PeopleIcon, 
-    RateReview as ReviewIcon, 
-    Code as CodeIcon, 
+    People as PeopleIcon,
+    RateReview as ReviewIcon,
     Star as StarIcon,
     MenuBook as CourseIcon
 } from '@mui/icons-material';
@@ -42,7 +41,6 @@ export default function AdminOverview() {
         { title: 'Користувачі', value: stats?.usersCount, icon: <PeopleIcon />, color: '#3b82f6' },
         { title: 'Курси', value: stats?.coursesCount, icon: <CourseIcon />, color: '#ec4899' },
         { title: 'Відгуки', value: stats?.reviewsCount, icon: <ReviewIcon />, color: '#10b981' },
-        { title: 'Рішення', value: stats?.submissionsCount, icon: <CodeIcon />, color: '#8b5cf6' },
         { title: 'Сер. рейтинг', value: stats?.averageRating?.toFixed(1) || '0.0', icon: <StarIcon />, color: '#fbbf24' },
     ];
 
