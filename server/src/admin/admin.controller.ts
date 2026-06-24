@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminService } from './admin.service';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -29,6 +29,19 @@ export class AdminController {
     @Get('stats')
     async getStats() {
         return this.adminService.getStats();
+    }
+
+    // ─────────── ТИМЧАСОВО: псевдо-відгуки (прибрати разом із формою) ───────────
+    @Post('reviews/mock')
+    async createMockReview(
+        @Body() body: { name: string; courseId: string; rating: number; comment?: string },
+    ) {
+        return this.adminService.createMockReview(body.name, body.courseId, body.rating, body.comment);
+    }
+
+    @Delete('reviews/mock')
+    async deleteMockReviews() {
+        return this.adminService.deleteMockReviews();
     }
 
     @Patch('users/:id/role')
