@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, BadRequestException } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Role } from '@prisma/client';
 import { MailService } from '../auth/mail.service';
@@ -85,42 +85,6 @@ export class AdminService {
             },
             orderBy: { createdAt: 'desc' },
         });
-    }
-
-    // ─────────── ТИМЧАСОВО: псевдо-відгуки ───────────
-    // Усі псевдо-студенти створюються на цьому домені, щоб їх легко було
-    // знайти та видалити одним запитом. Прибрати разом із формою.
-    private readonly MOCK_EMAIL_DOMAIN = 'mock.cpplearn';
-
-    /** Створює відгук від імені нового псевдо-студента. */
-    async createMockReview(name: string, courseId: string, rating: number, comment?: string) {
-        if (!name?.trim()) throw new BadRequestException('Вкажіть імʼя студента');
-        if (!courseId) throw new BadRequestException('Оберіть курс');
-        const r = Number(rating);
-        if (!Number.isInteger(r) || r < 1 || r > 5) {
-            throw new BadRequestException('Оцінка має бути цілим числом від 1 до 5');
-        }
-
-        const email = `mock-${crypto.randomBytes(5).toString('hex')}@${this.MOCK_EMAIL_DOMAIN}`;
-        const user = await this.prisma.user.create({
-            data: { email, name: name.trim(), role: Role.STUDENT },
-        });
-
-        return this.prisma.review.create({
-            data: { userId: user.id, courseId, rating: r, comment: comment?.trim() || null },
-            include: {
-                user: { select: { id: true, name: true, email: true } },
-                course: { select: { id: true, title: true, slug: true } },
-            },
-        });
-    }
-
-    /** Видаляє всіх псевдо-студентів; їхні відгуки приберуться каскадно. */
-    async deleteMockReviews() {
-        const result = await this.prisma.user.deleteMany({
-            where: { email: { endsWith: `@${this.MOCK_EMAIL_DOMAIN}` } },
-        });
-        return { deletedUsers: result.count };
     }
 
     async updateUserRole(userId: string, role: Role) {
