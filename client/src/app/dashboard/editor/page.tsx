@@ -8,10 +8,11 @@ import {
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { 
-    MenuBook as CourseIcon, 
+    MenuBook as CourseIcon,
     Add as AddIcon,
     Edit as EditIcon,
-    Group as GroupIcon
+    Group as GroupIcon,
+    DeleteOutline as DeleteIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -25,6 +26,20 @@ export default function EditorDashboard() {
     const [loading, setLoading] = useState(true);
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [newCourse, setNewCourse] = useState({ title: '', slug: '', description: '' });
+    const [confirmDelete, setConfirmDelete] = useState<{ id: string; title: string } | null>(null);
+
+    const handleDeleteCourse = async () => {
+        if (!confirmDelete) return;
+        try {
+            await axios.delete(`${API_URL}/management/courses/${confirmDelete.id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setConfirmDelete(null);
+            fetchCourses();
+        } catch (err) {
+            console.error('Failed to delete course:', err);
+        }
+    };
 
     const fetchCourses = async () => {
         try {
@@ -174,6 +189,20 @@ export default function EditorDashboard() {
                                     >
                                         <GroupIcon />
                                     </Button>
+                                    <Button
+                                        variant="outlined"
+                                        title="Видалити курс"
+                                        onClick={() => setConfirmDelete({ id: course.id, title: course.title })}
+                                        sx={{
+                                            minWidth: 48,
+                                            color: 'rgba(255, 255, 255, 0.5)',
+                                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                                            borderRadius: 2,
+                                            '&:hover': { color: '#ef4444', borderColor: '#ef4444', bgcolor: alpha('#ef4444', 0.05) }
+                                        }}
+                                    >
+                                        <DeleteIcon />
+                                    </Button>
                                 </Box>
                             </Paper>
                         </motion.div>
@@ -213,6 +242,26 @@ export default function EditorDashboard() {
                 <DialogActions sx={{ p: 3 }}>
                     <Button onClick={() => setIsCreateOpen(false)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>Скасувати</Button>
                     <Button variant="contained" onClick={handleCreateCourse} sx={{ bgcolor: '#3b82f6', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700 }}>Створити</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Delete Course Confirmation Dialog */}
+            <Dialog
+                open={!!confirmDelete}
+                onClose={() => setConfirmDelete(null)}
+                PaperProps={{
+                    sx: { bgcolor: '#0f172a', borderRadius: 4, border: '1px solid rgba(255, 255, 255, 0.1)', width: '100%', maxWidth: 460 }
+                }}
+            >
+                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>Видалити курс?</DialogTitle>
+                <DialogContent>
+                    <Typography sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                        Ви впевнені, що хочете видалити курс <strong style={{ color: '#fff' }}>{confirmDelete?.title}</strong>? Усі модулі, уроки та відгуки буде видалено. Цю дію неможливо скасувати.
+                    </Typography>
+                </DialogContent>
+                <DialogActions sx={{ p: 3 }}>
+                    <Button onClick={() => setConfirmDelete(null)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>Скасувати</Button>
+                    <Button variant="contained" onClick={handleDeleteCourse} sx={{ bgcolor: '#ef4444', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700, '&:hover': { bgcolor: '#dc2626' } }}>Видалити</Button>
                 </DialogActions>
             </Dialog>
         </Box>
