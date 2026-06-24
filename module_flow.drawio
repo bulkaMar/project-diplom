@@ -1,0 +1,171 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="diploma_flow" name="UML Activity">
+    <mxGraphModel dx="812" dy="530" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1653" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="nStart" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="460" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="nA" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Студент відкриває урок навчального модуля" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="nB" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Опрацьовує теоретичний матеріал" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="nC" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Проходить квіз (перевірка теорії)" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="nD" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Відповіді&lt;br&gt;правильні?" vertex="1">
+          <mxGeometry height="100" width="100" x="430" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="nE" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Система пропонує повторити матеріал і пройти знову" vertex="1">
+          <mxGeometry height="60" width="160" x="150" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="nF" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Відкриває практичне завдання, пише код" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="GD7gsgk0SQSzU-sWaQUU-1" edge="1" parent="1" source="nG" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nH" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nG" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Натискає «Run &amp;amp; Check»" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="nH" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Система компілює код (Godbolt API)" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="nI" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Компіляція&lt;br&gt;успішна?" vertex="1">
+          <mxGeometry height="100" width="100" x="430" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="nJ" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Запуск тестових сценаріїв" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="nK" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Система генерує AI-підказку" vertex="1">
+          <mxGeometry height="60" width="160" x="700" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="nL" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Усі тести&lt;br&gt;пройдено?" vertex="1">
+          <mxGeometry height="100" width="100" x="430" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="GD7gsgk0SQSzU-sWaQUU-4" edge="1" parent="1" source="nM" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nEnd" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nM" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Результат PASSED,&lt;br&gt;прогрес збережено" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="1250" as="geometry" />
+        </mxCell>
+        <mxCell id="nN" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Студент переглядає підказку" vertex="1">
+          <mxGeometry height="60" width="160" x="700" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="nO" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Спроби&lt;br&gt;залишились?" vertex="1">
+          <mxGeometry height="100" width="100" x="730" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="nP" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Статус «Завдання не виконане»" vertex="1">
+          <mxGeometry height="60" width="160" x="700" y="1250" as="geometry" />
+        </mxCell>
+        <mxCell id="nQ" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Модуль&lt;br&gt;завершено?" vertex="1">
+          <mxGeometry height="100" width="100" x="150" y="1230" as="geometry" />
+        </mxCell>
+        <mxCell id="nEnd" parent="1" style="ellipse;shape=doubleEllipse;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="460" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="nStart" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nA">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="nA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="nB" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="nC" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nD">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="nD" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_e5" connectable="0" parent="e5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Ні" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="nD" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nF">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_e7" connectable="0" parent="e7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Так" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="nF" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nG">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="nG" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nH">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="nH" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="nI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nJ">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_e11" connectable="0" parent="e11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Так" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="nI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_e12" connectable="0" parent="e12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Ні" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="nJ" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="nL" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nM">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_e14" connectable="0" parent="e14" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Так" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="nK" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="nN" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nO">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="nO" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_e19" connectable="0" parent="e19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Ні" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="nP" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nEnd">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="780" y="1380" />
+              <mxPoint x="480" y="1380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="nM" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="nQ">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GD7gsgk0SQSzU-sWaQUU-2" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="nO" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="530" y="1150" as="sourcePoint" />
+            <mxPoint x="580" y="1100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GD7gsgk0SQSzU-sWaQUU-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Так" vertex="1">
+          <mxGeometry height="30" width="60" x="310" y="1250" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
