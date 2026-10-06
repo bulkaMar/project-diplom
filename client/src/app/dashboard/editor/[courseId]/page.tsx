@@ -15,10 +15,12 @@ import StudioLayout from '@/components/Editor/StudioLayout';
 import TheoryEditor from '@/components/Editor/TheoryEditor';
 import QuizEditor from '@/components/Editor/QuizEditor';
 import PracticeEditor from '@/components/Editor/PracticeEditor';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function CourseContentEditor() {
+    const tr = useT();
     const { token } = useAuth();
     const { courseId } = useParams();
     const router = useRouter();
@@ -170,15 +172,15 @@ export default function CourseContentEditor() {
             
             await fetchCourseData();
             
-            let successMsg = 'Зміни в уроці збережено!';
+            let successMsg = tr('Зміни в уроці збережено!', 'Lesson changes saved!');
             if (trigger === 'STUDIO') {
-                successMsg = course?.published ? 'Ваш курс успішно оновлено!' : 'Ваш курс опубліковано успішно!';
+                successMsg = course?.published ? tr('Ваш курс успішно оновлено!', 'Your course has been updated!') : tr('Ваш курс опубліковано успішно!', 'Your course has been published!');
             }
             
             notify(successMsg, 'success');
         } catch (err) {
             console.error('Failed to save lesson:', err);
-            notify('Помилка при збереженні', 'error');
+            notify(tr('Помилка при збереженні', 'Failed to save'), 'error');
         } finally {
             setSaving(false);
         }
@@ -218,7 +220,7 @@ export default function CourseContentEditor() {
                 title: newLessonTitle,
                 slug: `${activeModuleId}-${Date.now()}`,
                 orderIndex: 0,
-                content: 'Новий урок...',
+                content: tr('Новий урок...', 'New lesson...'),
                 type: newLessonType
             }, { headers: { Authorization: `Bearer ${token}` } });
             setIsLessonDialogOpen(false);
@@ -235,7 +237,7 @@ export default function CourseContentEditor() {
     
     if (!course) return (
         <div className="bg-[#070e1e] min-h-screen flex items-center justify-center text-[#dfe5fc]">
-            <Typography variant="h5">Курс не знайдено</Typography>
+            <Typography variant="h5">{tr('Курс не знайдено', 'Course not found')}</Typography>
         </div>
     );
 
@@ -245,12 +247,12 @@ export default function CourseContentEditor() {
             onPreview={() => selectedLesson?.slug && window.open(`/dashboard/lessons/${selectedLesson.slug}`, '_blank')}
             onNewModule={() => setIsModuleDialogOpen(true)}
             modules={course.modules || []}
-            publishButtonLabel={course?.published ? "Оновити курс" : "Опублікувати"}
+            publishButtonLabel={course?.published ? tr('Оновити курс', 'Update course') : tr('Опублікувати', 'Publish')}
         >
             <div className="flex h-full">
                 {/* Module & Lesson Sidebar (Internal) */}
                 <div className="w-48 border-r border-outline-variant/10 bg-[#0b1325]/50 overflow-y-auto p-4 space-y-6">
-                    <h3 className="text-[10px] font-bold text-outline tracking-widest uppercase px-2 mb-4">Навчальний План</h3>
+                    <h3 className="text-[10px] font-bold text-outline tracking-widest uppercase px-2 mb-4">{tr('Навчальний План', 'Curriculum')}</h3>
                     {course.modules?.map((module: any) => (
                         <div key={module.id} className="space-y-1">
                             <div className="flex items-center justify-between px-2 py-1 group cursor-pointer">
@@ -259,14 +261,14 @@ export default function CourseContentEditor() {
                                     <button
                                         onClick={() => { setActiveModuleId(module.id); setIsLessonDialogOpen(true); }}
                                         className="opacity-100 transition-opacity text-primary hover:text-primary-dim"
-                                        title="Додати урок"
+                                        title={tr('Додати урок', 'Add lesson')}
                                     >
                                         <span className="material-symbols-outlined text-sm">add</span>
                                     </button>
                                     <button
                                         onClick={() => handleDeleteModule(module.id, module.title)}
                                         className="opacity-0 group-hover:opacity-100 transition-opacity text-[#6e7589] hover:text-red-400"
-                                        title="Видалити модуль"
+                                        title={tr('Видалити модуль', 'Delete module')}
                                     >
                                         <span className="material-symbols-outlined text-sm">delete</span>
                                     </button>
@@ -342,7 +344,7 @@ export default function CourseContentEditor() {
                     ) : (
                         <div className="h-full flex items-center justify-center text-outline/30 flex-col gap-4">
                             <span className="material-symbols-outlined text-6xl">edit_note</span>
-                            <span className="headline-font font-bold">Оберіть урок для редагування</span>
+                            <span className="headline-font font-bold">{tr('Оберіть урок для редагування', 'Select a lesson to edit')}</span>
                         </div>
                     )}
                 </div>
@@ -350,32 +352,32 @@ export default function CourseContentEditor() {
 
             {/* MUI Dialogs Styled for Dark Theme */}
             <Dialog open={isModuleDialogOpen} onClose={() => setIsModuleDialogOpen(false)} PaperProps={{ sx: { bgcolor: '#11192d', borderRadius: 3, border: '1px solid rgba(255,255,255,0.05)', backgroundImage: 'none' } }}>
-                <DialogTitle sx={{ color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.05)', pb: 2, fontSize: '1.2rem', fontWeight: 700 }}>Новий модуль</DialogTitle>
+                <DialogTitle sx={{ color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.05)', pb: 2, fontSize: '1.2rem', fontWeight: 700 }}>{tr('Новий модуль', 'New module')}</DialogTitle>
                 <DialogContent sx={{ mt: 2 }}>
-                    <TextField autoFocus fullWidth label="Назва модуля" value={newModuleTitle} onChange={(e) => setNewModuleTitle(e.target.value)} sx={{ '& .MuiOutlinedInput-root': { color: '#fff', bgcolor: 'rgba(0,0,0,0.2)' }, '& label': { color: 'rgba(255,255,255,0.4)' } }} />
+                    <TextField autoFocus fullWidth label={tr('Назва модуля', 'Module title')} value={newModuleTitle} onChange={(e) => setNewModuleTitle(e.target.value)} sx={{ '& .MuiOutlinedInput-root': { color: '#fff', bgcolor: 'rgba(0,0,0,0.2)' }, '& label': { color: 'rgba(255,255,255,0.4)' } }} />
                 </DialogContent>
                 <DialogActions sx={{ p: 3, gap: 1 }}>
-                    <Button onClick={() => setIsModuleDialogOpen(false)} sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>Скасувати</Button>
-                    <Button onClick={handleCreateModule} variant="contained" sx={{ bgcolor: '#86adff', color: '#002c67', fontWeight: 700, px: 3 }}>Створити</Button>
+                    <Button onClick={() => setIsModuleDialogOpen(false)} sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{tr('Скасувати', 'Cancel')}</Button>
+                    <Button onClick={handleCreateModule} variant="contained" sx={{ bgcolor: '#86adff', color: '#002c67', fontWeight: 700, px: 3 }}>{tr('Створити', 'Create')}</Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog open={isLessonDialogOpen} onClose={() => setIsLessonDialogOpen(false)} PaperProps={{ sx: { bgcolor: '#11192d', borderRadius: 3, border: '1px solid rgba(255,255,255,0.05)', backgroundImage: 'none' } }}>
-                <DialogTitle sx={{ color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.05)', pb: 2, fontSize: '1.2rem', fontWeight: 700 }}>Новий урок</DialogTitle>
+                <DialogTitle sx={{ color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.05)', pb: 2, fontSize: '1.2rem', fontWeight: 700 }}>{tr('Новий урок', 'New lesson')}</DialogTitle>
                 <DialogContent sx={{ mt: 2, spaceY: 3 }}>
-                    <TextField autoFocus fullWidth label="Назва уроку" value={newLessonTitle} onChange={(e) => setNewLessonTitle(e.target.value)} sx={{ mb: 2, '& .MuiOutlinedInput-root': { color: '#fff', bgcolor: 'rgba(0,0,0,0.2)' }, '& label': { color: 'rgba(255,255,255,0.4)' } }} />
+                    <TextField autoFocus fullWidth label={tr('Назва уроку', 'Lesson title')} value={newLessonTitle} onChange={(e) => setNewLessonTitle(e.target.value)} sx={{ mb: 2, '& .MuiOutlinedInput-root': { color: '#fff', bgcolor: 'rgba(0,0,0,0.2)' }, '& label': { color: 'rgba(255,255,255,0.4)' } }} />
                     <FormControl fullWidth>
-                        <InputLabel sx={{ color: 'rgba(255,255,255,0.4)' }}>Тип уроку</InputLabel>
-                        <Select value={newLessonType} label="Тип уроку" onChange={(e) => setNewLessonType(e.target.value)} sx={{ color: '#fff', bgcolor: 'rgba(0,0,0,0.2)' }}>
-                            <MenuItem value="THEORY">Теорія</MenuItem>
-                            <MenuItem value="PRACTICE">Практика</MenuItem>
-                            <MenuItem value="QUIZ">Квіз</MenuItem>
+                        <InputLabel sx={{ color: 'rgba(255,255,255,0.4)' }}>{tr('Тип уроку', 'Lesson type')}</InputLabel>
+                        <Select value={newLessonType} label={tr('Тип уроку', 'Lesson type')} onChange={(e) => setNewLessonType(e.target.value)} sx={{ color: '#fff', bgcolor: 'rgba(0,0,0,0.2)' }}>
+                            <MenuItem value="THEORY">{tr('Теорія', 'Theory')}</MenuItem>
+                            <MenuItem value="PRACTICE">{tr('Практика', 'Practice')}</MenuItem>
+                            <MenuItem value="QUIZ">{tr('Квіз', 'Quiz')}</MenuItem>
                         </Select>
                     </FormControl>
                 </DialogContent>
                 <DialogActions sx={{ p: 3, gap: 1 }}>
-                    <Button onClick={() => setIsLessonDialogOpen(false)} sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>Скасувати</Button>
-                    <Button onClick={handleCreateLesson} variant="contained" sx={{ bgcolor: '#86adff', color: '#002c67', fontWeight: 700, px: 3 }}>Створити</Button>
+                    <Button onClick={() => setIsLessonDialogOpen(false)} sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{tr('Скасувати', 'Cancel')}</Button>
+                    <Button onClick={handleCreateLesson} variant="contained" sx={{ bgcolor: '#86adff', color: '#002c67', fontWeight: 700, px: 3 }}>{tr('Створити', 'Create')}</Button>
                 </DialogActions>
             </Dialog>
 
@@ -451,16 +453,16 @@ export default function CourseContentEditor() {
             >
                 <DialogTitle sx={{ color: '#fff', fontWeight: 700, pb: 0.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                     <span style={{ color: '#ef4444', fontSize: '1.25rem' }}>🗑</span>
-                    Видалити модуль?
+                    {tr('Видалити модуль?', 'Delete module?')}
                 </DialogTitle>
                 <DialogContent sx={{ pt: 1 }}>
                     <Typography sx={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                        Ви впевнені, що хочете видалити модуль{' '}
+                        {tr('Ви впевнені, що хочете видалити модуль', 'Are you sure you want to delete the module')}{' '}
                         <strong style={{ color: '#dfe5fc' }}>"{deleteModuleTarget?.title}"</strong>?
                     </Typography>
                     <Box sx={{ mt: 1.5, p: 1.5, borderRadius: 2, bgcolor: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
                         <Typography sx={{ color: '#fca5a5', fontSize: '0.78rem' }}>
-                            ⚠ Всі уроки цього модуля також будуть видалені. Цю дію неможливо скасувати.
+                            ⚠ {tr('Всі уроки цього модуля також будуть видалені. Цю дію неможливо скасувати.', 'All lessons in this module will be deleted too. This cannot be undone.')}
                         </Typography>
                     </Box>
                 </DialogContent>
@@ -469,7 +471,7 @@ export default function CourseContentEditor() {
                         onClick={() => setDeleteModuleTarget(null)}
                         sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600, textTransform: 'none' }}
                     >
-                        Скасувати
+                        {tr('Скасувати', 'Cancel')}
                     </Button>
                     <Button
                         onClick={confirmDeleteModule}
@@ -484,7 +486,7 @@ export default function CourseContentEditor() {
                             '&:hover': { bgcolor: '#b91c1c' }
                         }}
                     >
-                        Видалити
+                        {tr('Видалити', 'Delete')}
                     </Button>
                 </DialogActions>
             </Dialog>

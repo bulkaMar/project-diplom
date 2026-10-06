@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Close as CloseIcon, Star as StarIcon } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 interface CourseReviewModalProps {
     open: boolean;
@@ -26,6 +27,7 @@ interface CourseReviewModalProps {
 }
 
 const CourseReviewModal: React.FC<CourseReviewModalProps> = ({ open, onClose, onSubmit, courseTitle }) => {
+    const tr = useT();
     const [rating, setRating] = useState<number | null>(5);
     const [comment, setComment] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,10 +92,10 @@ const CourseReviewModal: React.FC<CourseReviewModalProps> = ({ open, onClose, on
                 </motion.div>
 
                 <Typography variant="h6" sx={{ color: '#fff', fontWeight: 800, mb: 1 }}>
-                    Поділіться враженнями!
+                    {tr('Поділіться враженнями!', 'Share your thoughts!')}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mb: 3 }}>
-                    Ви пройшли значну частину курсу "{courseTitle}". Як вам навчання?
+                    {tr('Ви пройшли значну частину курсу', 'You’ve completed a big part of the course')} "{courseTitle}". {tr('Як вам навчання?', 'How are you finding it?')}
                 </Typography>
 
                 <Box sx={{ mb: 4 }}>
@@ -109,7 +111,7 @@ const CourseReviewModal: React.FC<CourseReviewModalProps> = ({ open, onClose, on
                     fullWidth
                     multiline
                     rows={3}
-                    placeholder="Ваш відгук (необов'язково)"
+                    placeholder={tr('Ваш відгук (необов\'язково)', 'Your review (optional)')}
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     sx={{
@@ -141,7 +143,7 @@ const CourseReviewModal: React.FC<CourseReviewModalProps> = ({ open, onClose, on
                         '&.Mui-disabled': { bgcolor: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.2)' }
                     }}
                 >
-                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Надіслати відгук'}
+                    {isSubmitting ? <CircularProgress size={24} color="inherit" /> : tr('Надіслати відгук', 'Submit review')}
                 </Button>
 
                 <Button
@@ -156,7 +158,7 @@ const CourseReviewModal: React.FC<CourseReviewModalProps> = ({ open, onClose, on
                         '&:hover': { color: 'rgba(255, 255, 255, 0.5)', bgcolor: 'transparent' }
                     }}
                 >
-                    Можливо пізніше
+                    {tr('Можливо пізніше', 'Maybe later')}
                 </Button>
             </Box>
         </Dialog>

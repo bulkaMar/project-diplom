@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography, Box, LinearProgress, Button, Chip, CardActions } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 interface CourseCardProps {
     course: {
@@ -19,6 +20,7 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+    const tr = useT();
     const router = useRouter();
 
     return (
@@ -55,7 +57,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                             }} 
                         />
                         <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)', fontWeight: 700, letterSpacing: '0.05em' }}>
-                            {course._count?.modules || 0} МОДУЛІВ
+                            {course._count?.modules || 0} {tr('МОДУЛІВ', 'MODULES')}
                         </Typography>
                     </Box>
                     <Typography 
@@ -89,7 +91,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                     <Box sx={{ mt: 'auto' }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, alignItems: 'center' }}>
                             <Typography variant="caption" sx={{ fontWeight: 800, color: '#86adff', textTransform: 'uppercase', letterSpacing: '0.1em', fontSize: '0.65rem' }}>
-                                ВАШ ПРОГРЕС
+                                {tr('ВАШ ПРОГРЕС', 'YOUR PROGRESS')}
                             </Typography>
                             <Typography variant="caption" sx={{ fontWeight: 800, color: '#fff', fontSize: '0.85rem', fontFamily: "'Space Grotesk', sans-serif" }}>
                                 {Math.round(course.progressPercent || 0)}%
@@ -131,7 +133,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                             transition: 'all 0.3s ease'
                         }}
                     >
-                        {(course.progressPercent || 0) > 0 ? 'Продовжити' : 'Почати курс'}
+                        {(course.progressPercent || 0) > 0 ? tr('Продовжити', 'Continue') : tr('Почати курс', 'Start course')}
                     </Button>
                 </CardActions>
             </Card>

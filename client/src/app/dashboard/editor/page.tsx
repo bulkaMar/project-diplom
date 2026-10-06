@@ -16,10 +16,12 @@ import {
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function EditorDashboard() {
+    const tr = useT();
     const { token, user } = useAuth();
     const router = useRouter();
     const [courses, setCourses] = useState<any[]>([]);
@@ -93,10 +95,10 @@ export default function EditorDashboard() {
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box>
                     <Typography variant="h4" sx={{ color: '#fff', fontWeight: 900, mb: 1 }}>
-                        Редактор курсів
+                        {tr('Редактор курсів', 'Course editor')}
                     </Typography>
                     <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-                        Створюйте та редагуйте навчальний контент для ваших студентів.
+                        {tr('Створюйте та редагуйте навчальний контент для ваших студентів.', 'Create and edit learning content for your students.')}
                     </Typography>
                 </Box>
                 <Button
@@ -113,7 +115,7 @@ export default function EditorDashboard() {
                         '&:hover': { bgcolor: '#2563eb' }
                     }}
                 >
-                    Створити курс
+                    {tr('Створити курс', 'Create course')}
                 </Button>
             </Box>
 
@@ -142,7 +144,7 @@ export default function EditorDashboard() {
                                         <CourseIcon />
                                     </Box>
                                     <Chip 
-                                        label={course.published ? "Опубліковано" : "Чернетка"} 
+                                        label={course.published ? tr('Опубліковано', 'Published') : tr('Чернетка', 'Draft')} 
                                         size="small"
                                         sx={{ 
                                             bgcolor: course.published ? alpha('#10b981', 0.1) : alpha('#f59e0b', 0.1),
@@ -156,7 +158,7 @@ export default function EditorDashboard() {
                                     {course.title}
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.4)', mb: 3, height: 40, overflow: 'hidden' }}>
-                                    {course.description || 'Немає опису'}
+                                    {course.description || tr('Немає опису', 'No description')}
                                 </Typography>
                                 
                                 <Box sx={{ display: 'flex', gap: 2 }}>
@@ -174,11 +176,11 @@ export default function EditorDashboard() {
                                             '&:hover': { borderColor: '#fff' }
                                         }}
                                     >
-                                        Редагувати
+                                        {tr('Редагувати', 'Edit')}
                                     </Button>
                                     <Button
                                         variant="outlined"
-                                        title="Групи"
+                                        title={tr('Групи', 'Groups')}
                                         sx={{
                                             minWidth: 48,
                                             color: 'rgba(255, 255, 255, 0.5)',
@@ -191,7 +193,7 @@ export default function EditorDashboard() {
                                     </Button>
                                     <Button
                                         variant="outlined"
-                                        title="Видалити курс"
+                                        title={tr('Видалити курс', 'Delete course')}
                                         onClick={() => setConfirmDelete({ id: course.id, title: course.title })}
                                         sx={{
                                             minWidth: 48,
@@ -218,18 +220,18 @@ export default function EditorDashboard() {
                     sx: { bgcolor: '#0f172a', borderRadius: 4, border: '1px solid rgba(255, 255, 255, 0.1)', width: '100%', maxWidth: 500 }
                 }}
             >
-                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>Створити новий курс</DialogTitle>
+                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>{tr('Створити новий курс', 'Create a new course')}</DialogTitle>
                 <DialogContent>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 1 }}>
                         <TextField
-                            label="Назва курсу"
+                            label={tr('Назва курсу', 'Course title')}
                             fullWidth
                             value={newCourse.title}
                             onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
                             sx={{ '& .MuiOutlinedInput-root': { color: '#fff', bgcolor: 'rgba(255,255,255,0.03)' }, '& label': { color: 'rgba(255,255,255,0.5)' } }}
                         />
                         <TextField
-                            label="Опис"
+                            label={tr('Опис', 'Description')}
                             fullWidth
                             multiline
                             rows={3}
@@ -240,8 +242,8 @@ export default function EditorDashboard() {
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ p: 3 }}>
-                    <Button onClick={() => setIsCreateOpen(false)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>Скасувати</Button>
-                    <Button variant="contained" onClick={handleCreateCourse} sx={{ bgcolor: '#3b82f6', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700 }}>Створити</Button>
+                    <Button onClick={() => setIsCreateOpen(false)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>{tr('Скасувати', 'Cancel')}</Button>
+                    <Button variant="contained" onClick={handleCreateCourse} sx={{ bgcolor: '#3b82f6', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700 }}>{tr('Створити', 'Create')}</Button>
                 </DialogActions>
             </Dialog>
 
@@ -253,15 +255,16 @@ export default function EditorDashboard() {
                     sx: { bgcolor: '#0f172a', borderRadius: 4, border: '1px solid rgba(255, 255, 255, 0.1)', width: '100%', maxWidth: 460 }
                 }}
             >
-                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>Видалити курс?</DialogTitle>
+                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>{tr('Видалити курс?', 'Delete course?')}</DialogTitle>
                 <DialogContent>
                     <Typography sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                        Ви впевнені, що хочете видалити курс <strong style={{ color: '#fff' }}>{confirmDelete?.title}</strong>? Усі модулі, уроки та відгуки буде видалено. Цю дію неможливо скасувати.
+                        {tr('Ви впевнені, що хочете видалити курс', 'Are you sure you want to delete the course')} <strong style={{ color: '#fff' }}>{confirmDelete?.title}</strong>?{' '}
+                        {tr('Усі модулі, уроки та відгуки буде видалено. Цю дію неможливо скасувати.', 'All modules, lessons and reviews will be deleted. This cannot be undone.')}
                     </Typography>
                 </DialogContent>
                 <DialogActions sx={{ p: 3 }}>
-                    <Button onClick={() => setConfirmDelete(null)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>Скасувати</Button>
-                    <Button variant="contained" onClick={handleDeleteCourse} sx={{ bgcolor: '#ef4444', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700, '&:hover': { bgcolor: '#dc2626' } }}>Видалити</Button>
+                    <Button onClick={() => setConfirmDelete(null)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>{tr('Скасувати', 'Cancel')}</Button>
+                    <Button variant="contained" onClick={handleDeleteCourse} sx={{ bgcolor: '#ef4444', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700, '&:hover': { bgcolor: '#dc2626' } }}>{tr('Видалити', 'Delete')}</Button>
                 </DialogActions>
             </Dialog>
         </Box>

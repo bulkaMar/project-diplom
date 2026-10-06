@@ -13,10 +13,12 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function CourseDetailPage({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+    const tr = useT();
     const params = use(paramsPromise);
     const router = useRouter();
     const { token, isLoading: authLoading } = useAuth();
@@ -128,14 +130,14 @@ export default function CourseDetailPage({ params: paramsPromise }: { params: Pr
                                         }
                                     }}
                                 >
-                                    Залишити відгук
+                                    {tr('Залишити відгук', 'Leave a review')}
                                 </Button>
                             )}
                         </Box>
 
                         <Box sx={{ maxWidth: 450 }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
-                                <Typography variant="body2" sx={{ fontWeight: 600, opacity: 0.9 }}>Загальний прогрес</Typography>
+                                <Typography variant="body2" sx={{ fontWeight: 600, opacity: 0.9 }}>{tr('Загальний прогрес', 'Overall progress')}</Typography>
                                 <Typography variant="body2" sx={{ fontWeight: 800 }}>{Math.round(course.progressPercent)}%</Typography>
                             </Box>
                             <LinearProgress
@@ -150,7 +152,7 @@ export default function CourseDetailPage({ params: paramsPromise }: { params: Pr
                         </Box>
                     </Paper>
 
-                    <Typography variant="h5" fontWeight="800" sx={{ mb: 4, color: '#fff', letterSpacing: -0.5 }}>Програма курсу</Typography>
+                    <Typography variant="h5" fontWeight="800" sx={{ mb: 4, color: '#fff', letterSpacing: -0.5 }}>{tr('Програма курсу', 'Curriculum')}</Typography>
 
                     {course.modules.map((module: any, index: number) => {
                         const isCompleted = module.lessons.every((l: any) => l.progress?.[0]?.completed);
@@ -175,13 +177,13 @@ export default function CourseDetailPage({ params: paramsPromise }: { params: Pr
                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', pr: 2 }}>
                                         <Box>
                                             <Typography variant="caption" sx={{ color: '#3b82f6', fontWeight: 700, mb: 0.5, display: 'block' }}>
-                                                МОДУЛЬ {index + 1} • {module.lessons?.length || 0} ЗАВДАНЬ
+                                                {tr('МОДУЛЬ', 'MODULE')} {index + 1} • {module.lessons?.length || 0} {tr('ЗАВДАНЬ', 'TASKS')}
                                             </Typography>
                                             <Typography variant="h6" fontWeight="800">{module.title}</Typography>
                                         </Box>
                                         {isCompleted && (
                                             <Chip
-                                                label="ПРОЙДЕНО"
+                                                label={tr('ПРОЙДЕНО', 'COMPLETED')}
                                                 size="small"
                                                 sx={{
                                                     bgcolor: 'rgba(16, 185, 129, 0.1)',

@@ -9,10 +9,11 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import styles from '../login/login.module.css';
 import localStyles from '../forgot-password/forgot.module.css';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-function getPasswordStrength(password: string): { level: number; label: string; color: string } {
+function getPasswordStrength(password: string, tr: (uk: string, en: string) => string): { level: number; label: string; color: string } {
     if (password.length === 0) return { level: 0, label: '', color: 'transparent' };
     let score = 0;
     if (password.length >= 8) score++;
@@ -20,15 +21,16 @@ function getPasswordStrength(password: string): { level: number; label: string; 
     if (/[0-9]/.test(password)) score++;
     if (/[^A-Za-z0-9]/.test(password)) score++;
     const levels = [
-        { level: 1, label: 'Слабкий', color: '#ef4444' },
-        { level: 2, label: 'Середній', color: '#f59e0b' },
-        { level: 3, label: 'Хороший', color: '#3b82f6' },
-        { level: 4, label: 'Надійний', color: '#10b981' },
+        { level: 1, label: tr('Слабкий', 'Weak'), color: '#ef4444' },
+        { level: 2, label: tr('Середній', 'Fair'), color: '#f59e0b' },
+        { level: 3, label: tr('Хороший', 'Good'), color: '#3b82f6' },
+        { level: 4, label: tr('Надійний', 'Strong'), color: '#10b981' },
     ];
     return levels[Math.min(score - 1, 3)] || levels[0];
 }
 
 function ResetPasswordForm() {
+    const tr = useT();
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
@@ -40,7 +42,7 @@ function ResetPasswordForm() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const strength = getPasswordStrength(password);
+    const strength = getPasswordStrength(password, tr);
 
     useEffect(() => {
         if (!token) {
@@ -51,11 +53,11 @@ function ResetPasswordForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirm) {
-            setError('Паролі не співпадають');
+            setError(tr('Паролі не співпадають', 'Passwords do not match'));
             return;
         }
         if (password.length < 8) {
-            setError('Пароль має містити щонайменше 8 символів');
+            setError(tr('Пароль має містити щонайменше 8 символів', 'Password must be at least 8 characters'));
             return;
         }
         setLoading(true);
@@ -67,7 +69,7 @@ function ResetPasswordForm() {
                 body: JSON.stringify({ token, password }),
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.message || 'Помилка скидання пароля');
+            if (!res.ok) throw new Error(data.message || tr('Помилка скидання пароля', 'Password reset failed'));
             setDone(true);
             setTimeout(() => router.push('/login'), 3000);
         } catch (err: any) {
@@ -86,12 +88,12 @@ function ResetPasswordForm() {
             <main className={styles.container}>
                 <div className={styles.header}>
                     <h1 className={styles.title}>
-                        {done ? 'Пароль змінено!' : 'Новий пароль'}
+                        {done ? tr('Пароль змінено!', 'Password changed!') : tr('Новий пароль', 'New password')}
                     </h1>
                     <p className={styles.subtitle}>
                         {done
-                            ? 'Зараз вас перенаправить на сторінку входу...'
-                            : 'Придумайте надійний пароль для вашого акаунта'}
+                            ? tr('Зараз вас перенаправить на сторінку входу...', 'Redirecting you to the login page...')
+                            : tr('Придумайте надійний пароль для вашого акаунта', 'Choose a strong password for your account')}
                     </p>
                 </div>
 
@@ -99,7 +101,7 @@ function ResetPasswordForm() {
                     {done ? (
                         <div className={localStyles.successBox}>
                             <CheckCircleOutlineIcon style={{ fontSize: 56, color: '#4ade80', display: 'block', margin: '0 auto 1.5rem' }} />
-                            <p>Ваш пароль було успішно оновлено. Використовуйте його для наступного входу.</p>
+                            <p>{tr('Ваш пароль було успішно оновлено. Використовуйте його для наступного входу.', 'Your password has been updated. Use it next time you log in.')}</p>
                         </div>
                     ) : (
                         <>
@@ -113,7 +115,7 @@ function ResetPasswordForm() {
                                 {/* New password */}
                                 <div className={styles.fieldGroup}>
                                     <label className={styles.label} htmlFor="password">
-                                        Новий пароль
+                                        {tr('Новий пароль', 'New password')}
                                     </label>
                                     <div className={styles.inputWrapper}>
                                         <LockOutlinedIcon className={styles.inputIcon} />
@@ -122,7 +124,7 @@ function ResetPasswordForm() {
                                             className={styles.input}
                                             type={showPass ? 'text' : 'password'}
                                             required
-                                            placeholder="Мінімум 8 символів"
+                                            placeholder={tr('Мінімум 8 символів', 'At least 8 characters')}
                                             value={password}
                                             onChange={e => setPassword(e.target.value)}
                                             style={{ paddingRight: '3rem' }}
@@ -161,7 +163,7 @@ function ResetPasswordForm() {
                                 {/* Confirm password */}
                                 <div className={styles.fieldGroup}>
                                     <label className={styles.label} htmlFor="confirm">
-                                        Підтвердіть пароль
+                                        {tr('Підтвердіть пароль', 'Confirm password')}
                                     </label>
                                     <div className={styles.inputWrapper}>
                                         <LockOutlinedIcon className={styles.inputIcon} />
@@ -170,7 +172,7 @@ function ResetPasswordForm() {
                                             className={styles.input}
                                             type={showPass ? 'text' : 'password'}
                                             required
-                                            placeholder="Повторіть пароль"
+                                            placeholder={tr('Повторіть пароль', 'Repeat password')}
                                             value={confirm}
                                             onChange={e => setConfirm(e.target.value)}
                                         />
@@ -182,7 +184,7 @@ function ResetPasswordForm() {
                                     className={styles.submitBtn}
                                     disabled={loading}
                                 >
-                                    {loading ? 'Збереження...' : 'ЗБЕРЕГТИ ПАРОЛЬ'}
+                                    {loading ? tr('Збереження...', 'Saving...') : tr('ЗБЕРЕГТИ ПАРОЛЬ', 'SAVE PASSWORD')}
                                 </button>
                             </form>
                         </>
@@ -192,7 +194,7 @@ function ResetPasswordForm() {
                 {!done && (
                     <p className={styles.footerText}>
                         <Link href="/forgot-password" className={localStyles.backLink}>
-                            Запросити нове посилання
+                            {tr('Запросити нове посилання', 'Request a new link')}
                         </Link>
                     </p>
                 )}

@@ -7,10 +7,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import styles from '../login/login.module.css';
 import localStyles from './forgot.module.css';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function ForgotPasswordPage() {
+    const tr = useT();
     const [email, setEmail] = useState('');
     const [sent, setSent] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -26,10 +28,10 @@ export default function ForgotPasswordPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
             });
-            if (!res.ok) throw new Error('Помилка запиту');
+            if (!res.ok) throw new Error(tr('Помилка запиту', 'Request failed'));
             setSent(true);
         } catch {
-            setError('Помилка. Спробуйте ще раз.');
+            setError(tr('Помилка. Спробуйте ще раз.', 'Something went wrong. Please try again.'));
         } finally {
             setLoading(false);
         }
@@ -44,12 +46,12 @@ export default function ForgotPasswordPage() {
             <main className={styles.container}>
                 <div className={styles.header}>
                     <h1 className={styles.title}>
-                        {sent ? 'Лист надіслано' : 'Забули пароль?'}
+                        {sent ? tr('Лист надіслано', 'Email sent') : tr('Забули пароль?', 'Forgot password?')}
                     </h1>
                     <p className={styles.subtitle}>
                         {sent
-                            ? 'Перевірте свою пошту та перейдіть за посиланням'
-                            : 'Введіть свій email і ми надішлемо посилання для скидання пароля'}
+                            ? tr('Перевірте свою пошту та перейдіть за посиланням', 'Check your inbox and follow the link')
+                            : tr('Введіть свій email і ми надішлемо посилання для скидання пароля', 'Enter your email and we’ll send you a password reset link')}
                     </p>
                 </div>
 
@@ -57,8 +59,11 @@ export default function ForgotPasswordPage() {
                     {sent ? (
                         <div className={localStyles.successBox}>
                             <CheckCircleOutlineIcon sx={{ fontSize: 48, color: '#4ade80', mb: 2 }} />
-                            <p>Якщо акаунт з адресою <strong>{email}</strong> існує, ви отримаєте лист протягом кількох хвилин.</p>
-                            <p className={localStyles.noteText}>Посилання дійсне протягом 1 години. Перевірте папку «Спам», якщо лист не з'явився.</p>
+                            <p>
+                                {tr('Якщо акаунт з адресою', 'If an account with')} <strong>{email}</strong>{' '}
+                                {tr('існує, ви отримаєте лист протягом кількох хвилин.', 'exists, you’ll receive an email within a few minutes.')}
+                            </p>
+                            <p className={localStyles.noteText}>{tr('Посилання дійсне протягом 1 години. Перевірте папку «Спам», якщо лист не з\'явився.', 'The link is valid for 1 hour. Check your Spam folder if the email doesn’t arrive.')}</p>
                         </div>
                     ) : (
                         <>
@@ -70,7 +75,7 @@ export default function ForgotPasswordPage() {
                             <form onSubmit={handleSubmit} className={styles.form}>
                                 <div className={styles.fieldGroup}>
                                     <label className={styles.label} htmlFor="email">
-                                        Електронна пошта
+                                        {tr('Електронна пошта', 'Email')}
                                     </label>
                                     <div className={styles.inputWrapper}>
                                         <MailOutlineIcon className={styles.inputIcon} />
@@ -91,7 +96,7 @@ export default function ForgotPasswordPage() {
                                     className={styles.submitBtn}
                                     disabled={loading}
                                 >
-                                    {loading ? 'Надсилання...' : 'НАДІСЛАТИ ПОСИЛАННЯ'}
+                                    {loading ? tr('Надсилання...', 'Sending...') : tr('НАДІСЛАТИ ПОСИЛАННЯ', 'SEND LINK')}
                                 </button>
                             </form>
                         </>
@@ -101,7 +106,7 @@ export default function ForgotPasswordPage() {
                 <p className={styles.footerText}>
                     <Link href="/login" className={localStyles.backLink}>
                         <ArrowBackIcon style={{ fontSize: 16, verticalAlign: 'middle', marginRight: 4 }} />
-                        Повернутись до входу
+                        {tr('Повернутись до входу', 'Back to login')}
                     </Link>
                 </p>
             </main>

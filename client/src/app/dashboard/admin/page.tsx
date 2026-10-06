@@ -11,10 +11,12 @@ import {
     MenuBook as CourseIcon
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function AdminOverview() {
+    const tr = useT();
     const { token } = useAuth();
     const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -38,10 +40,10 @@ export default function AdminOverview() {
     if (loading) return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />;
 
     const statCards = [
-        { title: 'Користувачі', value: stats?.usersCount, icon: <PeopleIcon />, color: '#3b82f6' },
-        { title: 'Курси', value: stats?.coursesCount, icon: <CourseIcon />, color: '#ec4899' },
-        { title: 'Відгуки', value: stats?.reviewsCount, icon: <ReviewIcon />, color: '#10b981' },
-        { title: 'Сер. рейтинг', value: stats?.averageRating?.toFixed(1) || '0.0', icon: <StarIcon />, color: '#fbbf24' },
+        { title: tr('Користувачі', 'Users'), value: stats?.usersCount, icon: <PeopleIcon />, color: '#3b82f6' },
+        { title: tr('Курси', 'Courses'), value: stats?.coursesCount, icon: <CourseIcon />, color: '#ec4899' },
+        { title: tr('Відгуки', 'Reviews'), value: stats?.reviewsCount, icon: <ReviewIcon />, color: '#10b981' },
+        { title: tr('Сер. рейтинг', 'Avg. rating'), value: stats?.averageRating?.toFixed(1) || '0.0', icon: <StarIcon />, color: '#fbbf24' },
     ];
 
     return (
@@ -98,11 +100,11 @@ export default function AdminOverview() {
                 textAlign: 'center'
             }}>
                 <Typography variant="h6" sx={{ color: '#fff', mb: 2, fontWeight: 700 }}>
-                    Вітаємо в системі управління!
+                    {tr('Вітаємо в системі управління!', 'Welcome to the control panel!')}
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', maxWidth: 600, mx: 'auto' }}>
-                    Використовуйте вкладки вище для детального керування базою користувачів, контентом курсів та модерації відгуків. 
-                    Інформація оновлюється в режимі реального часу.
+                    {tr('Використовуйте вкладки вище для детального керування базою користувачів, контентом курсів та модерації відгуків.', 'Use the tabs above to manage users, course content and review moderation.')} 
+                    {tr('Інформація оновлюється в режимі реального часу.', 'Data updates in real time.')}
                 </Typography>
             </Paper>
         </Box>

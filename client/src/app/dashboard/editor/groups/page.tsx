@@ -17,10 +17,12 @@ import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function GroupManagement() {
+    const tr = useT();
     const { token } = useAuth();
     const router = useRouter();
     
@@ -87,8 +89,8 @@ export default function GroupManagement() {
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, gap: 2 }}>
                 <IconButton onClick={() => router.push('/dashboard/editor')} sx={{ color: '#fff' }}><BackIcon /></IconButton>
                 <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="h4" sx={{ color: '#fff', fontWeight: 900 }}>Керування Групами</Typography>
-                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>Організовуйте студентів та призначайте курси</Typography>
+                    <Typography variant="h4" sx={{ color: '#fff', fontWeight: 900 }}>{tr('Керування Групами', 'Group management')}</Typography>
+                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>{tr('Організовуйте студентів та призначайте курси', 'Organise students and assign courses')}</Typography>
                 </Box>
                 <Button 
                     variant="contained" 
@@ -96,7 +98,7 @@ export default function GroupManagement() {
                     onClick={() => setIsCreateOpen(true)}
                     sx={{ bgcolor: '#3b82f6', borderRadius: 3, px: 3, fontWeight: 800 }}
                 >
-                    Нова група
+                    {tr('Нова група', 'New group')}
                 </Button>
             </Box>
 
@@ -116,11 +118,11 @@ export default function GroupManagement() {
 
                                 <Box sx={{ display: 'flex', gap: 3, mb: 3 }}>
                                     <Box>
-                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>Студентів</Typography>
+                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>{tr('Студентів', 'Students')}</Typography>
                                         <Typography sx={{ color: '#fff', fontWeight: 800 }}>{group._count.users}</Typography>
                                     </Box>
                                     <Box>
-                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>Курсів</Typography>
+                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', display: 'block' }}>{tr('Курсів', 'Courses')}</Typography>
                                         <Typography sx={{ color: '#fff', fontWeight: 800 }}>{group._count.courses}</Typography>
                                     </Box>
                                 </Box>
@@ -133,7 +135,7 @@ export default function GroupManagement() {
                                         onClick={() => { setSelectedGroup(group); setLinkType('user'); setIsLinkOpen(true); }}
                                         sx={{ borderColor: 'rgba(255,255,255,0.1)', color: '#fff', borderRadius: 2, textTransform: 'none' }}
                                     >
-                                        Студент
+                                        {tr('Студент', 'Student')}
                                     </Button>
                                     <Button 
                                         fullWidth 
@@ -142,7 +144,7 @@ export default function GroupManagement() {
                                         onClick={() => { setSelectedGroup(group); setLinkType('course'); setIsLinkOpen(true); }}
                                         sx={{ borderColor: 'rgba(255,255,255,0.1)', color: '#fff', borderRadius: 2, textTransform: 'none' }}
                                     >
-                                        Курс
+                                        {tr('Курс', 'Course')}
                                     </Button>
                                 </Box>
                             </Paper>
@@ -153,14 +155,14 @@ export default function GroupManagement() {
 
             {/* Create Group Dialog */}
             <Dialog open={isCreateOpen} onClose={() => setIsCreateOpen(false)} PaperProps={{ sx: { bgcolor: '#0f172a', borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)' } }}>
-                <DialogTitle sx={{ color: '#fff' }}>Створити нову групу</DialogTitle>
-                <DialogContent><TextField autoFocus fullWidth label="Назва групи" value={groupName} onChange={(e) => setGroupName(e.target.value)} sx={{ mt: 1, '& .MuiOutlinedInput-root': { color: '#fff' }, '& label': { color: 'rgba(255,255,255,0.5)' } }} /></DialogContent>
-                <DialogActions sx={{ p: 3 }}><Button onClick={() => setIsCreateOpen(false)} sx={{ color: 'rgba(255,255,255,0.5)' }}>Скасувати</Button><Button onClick={handleCreateGroup} variant="contained" sx={{ bgcolor: '#3b82f6' }}>Створити</Button></DialogActions>
+                <DialogTitle sx={{ color: '#fff' }}>{tr('Створити нову групу', 'Create a new group')}</DialogTitle>
+                <DialogContent><TextField autoFocus fullWidth label={tr('Назва групи', 'Group name')} value={groupName} onChange={(e) => setGroupName(e.target.value)} sx={{ mt: 1, '& .MuiOutlinedInput-root': { color: '#fff' }, '& label': { color: 'rgba(255,255,255,0.5)' } }} /></DialogContent>
+                <DialogActions sx={{ p: 3 }}><Button onClick={() => setIsCreateOpen(false)} sx={{ color: 'rgba(255,255,255,0.5)' }}>{tr('Скасувати', 'Cancel')}</Button><Button onClick={handleCreateGroup} variant="contained" sx={{ bgcolor: '#3b82f6' }}>{tr('Створити', 'Create')}</Button></DialogActions>
             </Dialog>
 
             {/* Link Dialog */}
             <Dialog open={isLinkOpen} onClose={() => setIsLinkOpen(false)} PaperProps={{ sx: { bgcolor: '#0f172a', borderRadius: 4, border: '1px solid rgba(255,255,255,0.1)', width: '100%', maxWidth: 400 } }}>
-                <DialogTitle sx={{ color: '#fff' }}>Додати {linkType === 'user' ? 'студента' : 'курс'} до {selectedGroup?.name}</DialogTitle>
+                <DialogTitle sx={{ color: '#fff' }}>{linkType === 'user' ? tr('Додати студента до', 'Add a student to') : tr('Додати курс до', 'Add a course to')} {selectedGroup?.name}</DialogTitle>
                 <DialogContent>
                     <Autocomplete
                         options={linkType === 'user' ? users : courses}
@@ -169,7 +171,7 @@ export default function GroupManagement() {
                         renderInput={(params) => (
                             <TextField 
                                 {...params} 
-                                label={linkType === 'user' ? 'Оберіть студента' : 'Оберіть курс'} 
+                                label={linkType === 'user' ? tr('Оберіть студента', 'Select a student') : tr('Оберіть курс', 'Select a course')} 
                                 variant="outlined" 
                                 sx={{ mt: 2, '& .MuiOutlinedInput-root': { color: '#fff' }, '& label': { color: 'rgba(255,255,255,0.5)' } }}
                             />
@@ -178,8 +180,8 @@ export default function GroupManagement() {
                     />
                 </DialogContent>
                 <DialogActions sx={{ p: 3 }}>
-                    <Button onClick={() => setIsLinkOpen(false)} sx={{ color: 'rgba(255,255,255,0.5)' }}>Скасувати</Button>
-                    <Button onClick={handleLinkToGroup} variant="contained" sx={{ bgcolor: '#3b82f6' }}>Додати</Button>
+                    <Button onClick={() => setIsLinkOpen(false)} sx={{ color: 'rgba(255,255,255,0.5)' }}>{tr('Скасувати', 'Cancel')}</Button>
+                    <Button onClick={handleLinkToGroup} variant="contained" sx={{ bgcolor: '#3b82f6' }}>{tr('Додати', 'Add')}</Button>
                 </DialogActions>
             </Dialog>
         </Box>

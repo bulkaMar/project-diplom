@@ -1,13 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Layout/Navbar';
 import Footer from '@/components/Layout/Footer';
 import { Box } from '@mui/material';
+import { useLang } from '@/lib/i18n';
 
 export default function MainLayoutWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const lang = useLang((s) => s.lang);
+
+    // Apply the saved language after mount (the server always renders Ukrainian)
+    useEffect(() => {
+        useLang.persist.rehydrate();
+    }, []);
+
+    useEffect(() => {
+        document.documentElement.lang = lang;
+    }, [lang]);
     // Only hide navbar when deep inside the course editor studio
     // Pages like the editor dashboard and groups management should still have the navbar
     const isStudio = pathname.startsWith('/dashboard/editor/') && 

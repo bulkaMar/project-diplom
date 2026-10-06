@@ -7,8 +7,10 @@ import { Box, Container, Tab, Tabs, Typography } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+    const tr = useT();
     const { user, isLoading } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
@@ -34,10 +36,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     transition={{ duration: 0.5 }}
                 >
                     <Typography variant="h4" sx={{ color: '#fff', fontWeight: 900, mb: 1, letterSpacing: -1 }}>
-                        Адмін-панель
+                        {tr('Адмін-панель', 'Admin panel')}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mb: 4 }}>
-                        Керування користувачами, курсами, відгуками та аналітика
+                        {tr('Керування користувачами, курсами, відгуками та аналітика', 'Manage users, courses, reviews and analytics')}
                     </Typography>
 
                     <Box sx={{ borderBottom: 1, borderColor: 'rgba(255, 255, 255, 0.05)', mb: 4 }}>
@@ -59,10 +61,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 }
                             }}
                         >
-                            <Tab label="Огляд" component={Link} href="/dashboard/admin" />
-                            <Tab label="Користувачі" component={Link} href="/dashboard/admin/users" />
-                            <Tab label="Курси" component={Link} href="/dashboard/admin/courses" />
-                            <Tab label="Відгуки" component={Link} href="/dashboard/admin/reviews" />
+                            <Tab label={tr('Огляд', 'Overview')} component={Link} href="/dashboard/admin" />
+                            <Tab label={tr('Користувачі', 'Users')} component={Link} href="/dashboard/admin/users" />
+                            <Tab label={tr('Курси', 'Courses')} component={Link} href="/dashboard/admin/courses" />
+                            <Tab label={tr('Відгуки', 'Reviews')} component={Link} href="/dashboard/admin/reviews" />
                         </Tabs>
                     </Box>
                 </motion.div>

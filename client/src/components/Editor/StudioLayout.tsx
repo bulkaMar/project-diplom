@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useT } from '@/lib/i18n';
 
 interface StudioLayoutProps {
     children: React.ReactNode;
@@ -25,8 +26,9 @@ export default function StudioLayout({
     onPreview,
     onNewModule,
     modules,
-    publishButtonLabel = "Опублікувати"
+    publishButtonLabel
 }: StudioLayoutProps) {
+    const tr = useT();
     const router = useRouter();
     const { user } = useAuth();
 
@@ -47,8 +49,8 @@ export default function StudioLayout({
                                 <span className="material-symbols-outlined text-primary text-lg">arrow_back</span>
                             </div>
                             <div>
-                                <h2 className="text-sm font-bold text-[#dfe5fc] headline-font truncate" title={courseTitle}>{courseTitle || 'Завантаження...'}</h2>
-                                <p className="text-[10px] text-[#6e7589] headline-font tracking-widest uppercase">Редактор курсу</p>
+                                <h2 className="text-sm font-bold text-[#dfe5fc] headline-font truncate" title={courseTitle}>{courseTitle || tr('Завантаження...', 'Loading...')}</h2>
+                                <p className="text-[10px] text-[#6e7589] headline-font tracking-widest uppercase">{tr('Редактор курсу', 'Course editor')}</p>
                             </div>
                         </div>
                     </div>
@@ -60,14 +62,14 @@ export default function StudioLayout({
                             className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-[#86adff] bg-surface-container rounded-lg hover:bg-surface-container-high transition-all active:scale-95 headline-font border border-outline-variant/10"
                         >
                             <span className="material-symbols-outlined text-sm">visibility</span>
-                            Прев'ю
+                            {tr('Прев\'ю', 'Preview')}
                         </button>
                         <button 
                             onClick={onPublish}
                             className="flex items-center justify-center gap-2 py-2.5 bg-primary text-on-primary text-xs font-bold rounded-lg hover:shadow-[0_0_15px_rgba(134,173,255,0.2)] active:scale-95 transition-all headline-font"
                         >
                             <span className="material-symbols-outlined text-sm font-bold">save</span>
-                            {publishButtonLabel}
+                            {publishButtonLabel ?? tr('Опублікувати', 'Publish')}
                         </button>
                     </div>
 
@@ -83,7 +85,7 @@ export default function StudioLayout({
                                     }`}
                                 >
                                     <span className="material-symbols-outlined">menu_book</span>
-                                    <span>Теорія</span>
+                                    <span>{tr('Теорія', 'Theory')}</span>
                                 </button>
                                 <button 
                                     onClick={() => onModeChange('QUIZ')}
@@ -94,7 +96,7 @@ export default function StudioLayout({
                                     }`}
                                 >
                                     <span className="material-symbols-outlined">quiz</span>
-                                    <span>Квіз</span>
+                                    <span>{tr('Квіз', 'Quiz')}</span>
                                 </button>
                                 <button 
                                     onClick={() => onModeChange('PRACTICE')}
@@ -105,7 +107,7 @@ export default function StudioLayout({
                                     }`}
                                 >
                                     <span className="material-symbols-outlined">code</span>
-                                    <span>Практика</span>
+                                    <span>{tr('Практика', 'Practice')}</span>
                                 </button>
                             </>
                         )}
@@ -117,7 +119,7 @@ export default function StudioLayout({
                             className="w-full flex items-center justify-center gap-2 py-3 bg-surface-bright text-primary text-sm font-bold rounded-lg hover:bg-surface-container-high transition-colors headline-font shadow-lg shadow-black/20"
                         >
                             <span className="material-symbols-outlined text-sm">add</span>
-                            Новий модуль
+                            {tr('Новий модуль', 'New module')}
                         </button>
                     </div>
                 </aside>

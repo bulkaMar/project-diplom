@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { motion } from 'framer-motion';
 import CodeIcon from '@mui/icons-material/Code';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import { useT } from '@/lib/i18n';
 
 interface TheoryViewProps {
     lesson: any;
@@ -173,6 +174,7 @@ function splitContent(raw: string) {
 }
 
 export default function TheoryView({ lesson, onComplete }: TheoryViewProps) {
+    const tr = useT();
     const segments = splitContent(lesson.content || '');
 
     return (
@@ -196,7 +198,7 @@ export default function TheoryView({ lesson, onComplete }: TheoryViewProps) {
                                 color: '#3b82f6', fontWeight: 900,
                                 letterSpacing: '0.2em', fontSize: '0.68rem'
                             }}>
-                                {lesson.module?.title?.toUpperCase() || 'МОДУЛЬ'} • {lesson.difficulty || 'BASIC'}
+                                {lesson.module?.title?.toUpperCase() || tr('МОДУЛЬ', 'MODULE')} • {lesson.difficulty || 'BASIC'}
                             </Typography>
                         </Box>
                         <Typography variant="h2" sx={{
@@ -279,7 +281,7 @@ export default function TheoryView({ lesson, onComplete }: TheoryViewProps) {
                                 width: { xs: '100%', sm: 'auto' }
                             }}
                         >
-                            Завершити і продовжити →
+                            {tr('Завершити і продовжити →', 'Complete and continue →')}
                         </Button>
                     </Box>
                 </motion.div>

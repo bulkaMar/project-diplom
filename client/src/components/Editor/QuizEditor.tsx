@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CircularProgress } from '@mui/material';
+import { useT } from '@/lib/i18n';
 
 interface QuizQuestion {
     id: string;
@@ -20,6 +21,7 @@ interface QuizEditorProps {
 }
 
 export default function QuizEditor({ questions, onQuestionsChange, onSave, saving }: QuizEditorProps) {
+    const tr = useT();
     const handleAddQuestion = () => {
         const newQuestion: QuizQuestion = {
             id: Math.random().toString(36).substr(2, 9),
@@ -45,12 +47,12 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
         <div className="max-w-7xl mx-auto p-10">
             <header className="mb-12 pl-4">
                 <div className="flex items-center gap-2 text-primary font-label text-xs tracking-[0.2em] mb-3 uppercase">
-                    <span>МОДУЛЬ QUIZ</span>
+                    <span>{tr('МОДУЛЬ QUIZ', 'QUIZ MODULE')}</span>
                     <span className="w-8 h-[1px] bg-outline-variant/30"></span>
                     <span>QUIZ EDITOR</span>
                 </div>
                 <h1 className="text-4xl font-headline font-bold text-on-surface tracking-tight leading-tight">
-                    Редактор запитань <br/>
+                    {tr('Редактор запитань', 'Question editor')} <br/>
                     <span className="text-[#86adff]/50">С++ Knowledge Check</span>
                 </h1>
                 <div className="mt-6 flex items-center gap-4">
@@ -60,9 +62,9 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                         className="px-8 py-2.5 bg-primary text-on-primary font-bold rounded-lg hover:shadow-lg transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
                     >
                         <span className="material-symbols-outlined">save</span>
-                        Зберегти Квіз
+                        {tr('Зберегти Квіз', 'Save quiz')}
                     </button>
-                    {saving && <span className="text-xs text-outline animate-pulse">Зберігаємо...</span>}
+                    {saving && <span className="text-xs text-outline animate-pulse">{tr('Зберігаємо...', 'Saving...')}</span>}
                 </div>
             </header>
 
@@ -72,7 +74,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                         {/* Section 1: Question Text */}
                         <section className="bg-surface-container-low p-8 rounded-xl border-l-2 border-primary-fixed-dim/20">
                             <div className="flex justify-between items-center mb-4">
-                                <label className="block font-label text-[10px] tracking-[0.15em] text-outline uppercase">Питання #{qIndex + 1}</label>
+                                <label className="block font-label text-[10px] tracking-[0.15em] text-outline uppercase">{tr('Питання', 'Question')} #{qIndex + 1}</label>
                                 <button onClick={() => deleteQuestion(qIndex)} className="text-outline hover:text-error transition-colors">
                                     <span className="material-symbols-outlined text-sm">delete</span>
                                 </button>
@@ -81,7 +83,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                                 value={q.question}
                                 onChange={(e) => updateQuestion(qIndex, { question: e.target.value })}
                                 className="w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary rounded-lg p-5 text-on-surface text-lg font-body placeholder:text-outline/40 min-h-[100px] transition-all" 
-                                placeholder="Введіть основне питання тут..."
+                                placeholder={tr('Введіть основне питання тут...', 'Enter the question here...')}
                             />
                         </section>
 
@@ -92,7 +94,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                                 <div className="flex items-center justify-between mb-6">
                                     <label className="font-label text-[10px] tracking-[0.15em] text-outline uppercase flex items-center gap-2">
                                         <span className="material-symbols-outlined text-sm">code</span>
-                                        Фрагмент коду (необов'язково)
+                                        {tr('Фрагмент коду (необов\'язково)', 'Code snippet (optional)')}
                                     </label>
                                 </div>
                                 <div className="bg-surface-container-lowest rounded-lg overflow-hidden border border-outline-variant/10">
@@ -101,7 +103,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                                         onChange={(e) => updateQuestion(qIndex, { code: e.target.value })}
                                         className="w-full bg-transparent border-none focus:ring-0 p-6 text-secondary font-mono text-sm min-h-[120px] resize-none" 
                                         spellCheck="false"
-                                        placeholder="// Вставте код тут..."
+                                        placeholder={tr('// Вставте код тут...', '// Paste code here...')}
                                     />
                                 </div>
                             </div>
@@ -109,7 +111,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
 
                         {/* Section 3: Answers */}
                         <section className="bg-surface-container-low p-8 rounded-xl">
-                            <label className="block font-label text-[10px] tracking-[0.15em] text-outline mb-6 uppercase">Варіанти відповідей (Оберіть одну вірну)</label>
+                            <label className="block font-label text-[10px] tracking-[0.15em] text-outline mb-6 uppercase">{tr('Варіанти відповідей (Оберіть одну вірну)', 'Answer options (pick the correct one)')}</label>
                             <div className="space-y-4">
                                 {q.options.map((opt, oIndex) => (
                                     <div key={oIndex} className="flex items-center gap-4 group">
@@ -124,7 +126,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                                                 updateQuestion(qIndex, { options: newOpts });
                                             }}
                                             className="flex-1 bg-surface-container-high border-none rounded-lg px-6 py-4 text-on-surface font-body focus:ring-2 focus:ring-primary-fixed-dim/30" 
-                                            placeholder={`Варіант ${String.fromCharCode(65 + oIndex)}`}
+                                            placeholder={`${tr('Варіант', 'Option')} ${String.fromCharCode(65 + oIndex)}`}
                                             type="text" 
                                         />
                                         <button 
@@ -151,12 +153,12 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                                     <span className="material-symbols-outlined">lightbulb</span>
                                 </div>
                                 <div className="flex-1">
-                                    <label className="block font-label text-[10px] tracking-[0.15em] text-primary mb-3 uppercase">Пояснення (Показується при помилці)</label>
+                                    <label className="block font-label text-[10px] tracking-[0.15em] text-primary mb-3 uppercase">{tr('Пояснення (Показується при помилці)', 'Explanation (shown on a wrong answer)')}</label>
                                     <textarea 
                                         value={q.explanation || ''}
                                         onChange={(e) => updateQuestion(qIndex, { explanation: e.target.value })}
                                         className="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary/40 rounded-lg p-4 text-on-surface font-body text-sm placeholder:text-outline/30 min-h-[80px]" 
-                                        placeholder="Поясніть правильну відповідь..."
+                                        placeholder={tr('Поясніть правильну відповідь...', 'Explain the correct answer...')}
                                     />
                                 </div>
                             </div>
@@ -170,7 +172,7 @@ export default function QuizEditor({ questions, onQuestionsChange, onSave, savin
                     className="w-full py-4 border-2 border-dashed border-outline-variant/20 rounded-xl text-outline hover:text-primary hover:border-primary/40 transition-all font-bold headline-font flex items-center justify-center gap-2"
                 >
                     <span className="material-symbols-outlined">add_circle</span>
-                    Додати питання
+                    {tr('Додати питання', 'Add question')}
                 </button>
             </div>
         </div>

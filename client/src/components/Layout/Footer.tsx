@@ -1,10 +1,12 @@
 'use client';
-import { Container, Typography, Box, Divider } from '@mui/material';
+import { Container, Typography, Box } from '@mui/material';
 import CodeIcon from '@mui/icons-material/Code';
 import { usePathname } from 'next/navigation';
+import { useLang } from '@/lib/i18n';
 
 export default function Footer() {
     const pathname = usePathname();
+    const en = useLang((s) => s.lang) === 'en';
 
     // Hide footer on lesson pages
     if (pathname?.includes('/dashboard/lessons/')) {
@@ -12,37 +14,43 @@ export default function Footer() {
     }
     return (
         <Box component="footer" sx={{
-            py: 2,
+            py: 4,
             mt: 'auto',
-            bgcolor: 'background.default',
-            borderTop: '1px solid rgba(255, 255, 255, 0.05)'
+            bgcolor: '#050a18',
+            borderTop: '1px solid rgba(255, 255, 255, 0.06)'
         }}>
             <Container maxWidth="lg">
                 <Box sx={{
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: { xs: 'column', md: 'row' },
                     alignItems: 'center',
-                    textAlign: 'center',
-                    gap: 1
+                    justifyContent: 'space-between',
+                    textAlign: { xs: 'center', md: 'left' },
+                    gap: 2
                 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <CodeIcon sx={{ fontSize: 24, mr: 1, color: 'primary.main' }} />
-                        <Typography variant="h6" fontWeight="bold">
-                            C++ Платформа
-                        </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <Box sx={{
+                            width: 30, height: 30, borderRadius: '9px',
+                            display: 'grid', placeItems: 'center',
+                            background: 'linear-gradient(135deg, #3b6bff 0%, #8b3dff 100%)'
+                        }}>
+                            <CodeIcon sx={{ fontSize: 18, color: '#fff' }} />
+                        </Box>
+                        <Box>
+                            <Typography sx={{ fontFamily: '"Space Grotesk", sans-serif', fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>
+                                {en ? 'C++ Platform' : 'C++ Платформа'}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#6b7699' }}>
+                                {en
+                                    ? 'Software Engineering at KNU will make you better'
+                                    : 'З КНУ Інженерія програмного забезпечення ти станеш кращим'}
+                            </Typography>
+                        </Box>
                     </Box>
-                    <Typography variant="body2" color="text.secondary" sx={{
-                        maxWidth: 700,
-                        fontStyle: 'italic',
-                        opacity: 0.8
-                    }}>
-                        З КНУ Інженерія програмного забезпечення ти станеш кращим, почни свій шлях зараз
+                    <Typography variant="caption" sx={{ color: '#6b7699' }}>
+                        © {new Date().getFullYear()} {en ? 'C++ Platform' : 'C++ Платформа'} · Next.js · NestJS · PostgreSQL
                     </Typography>
                 </Box>
-                <Divider sx={{ my: 1.5, opacity: 0.1 }} />
-                <Typography variant="caption" color="text.secondary" display="block" textAlign="center">
-                    © {new Date().getFullYear()} C++ Платформа. Всі права захищено.
-                </Typography>
             </Container>
         </Box>
     );

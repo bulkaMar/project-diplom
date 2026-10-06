@@ -21,8 +21,10 @@ import SendIcon from '@mui/icons-material/Send';
 import QuizView from '@/components/Lesson/QuizView';
 import TheoryView from '@/components/Lesson/TheoryView';
 import { api } from '@/lib/api';
+import { useT } from '@/lib/i18n';
 
 export default function LessonPage({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+    const tr = useT();
     const params = use(paramsPromise);
     const router = useRouter();
     const { token, isLoading: authLoading } = useAuth();
@@ -80,7 +82,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
             const res = await api.post<any>(`/submissions/${lesson.id}/run`, { code }, token || undefined);
             setRunOutput(res);
         } catch (err) {
-            setRunOutput({ cases: [{ index: 1, input: '', stdout: '', stderr: 'Помилка виконання.', expected: '', passed: false, exitCode: 1 }] });
+            setRunOutput({ cases: [{ index: 1, input: '', stdout: '', stderr: tr('Помилка виконання.', 'Execution error.'), expected: '', passed: false, exitCode: 1 }] });
         } finally {
             setIsRunning(false);
         }
@@ -96,7 +98,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
             const res = await api.post<any>(`/submissions/${lesson.id}`, { code }, token || undefined);
             setResult(res);
         } catch (err) {
-            setResult({ status: 'ERROR', output: 'Помилка при відправці. Перевірте зʼєднання.' });
+            setResult({ status: 'ERROR', output: tr('Помилка при відправці. Перевірте зʼєднання.', 'Submission failed. Check your connection.') });
         } finally {
             setSubmitting(false);
         }
@@ -126,7 +128,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
     };
 
     if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><CircularProgress /></Box>;
-    if (!lesson) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><Typography color="error">Урок не знайдено або ви не ввійшли.</Typography></Box>;
+    if (!lesson) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}><Typography color="error">{tr('Урок не знайдено або ви не ввійшли.', 'Lesson not found or you are not logged in.')}</Typography></Box>;
 
     return (
         <Box sx={{ bgcolor: '#020617', height: '100vh', display: 'flex', flexDirection: 'column', color: '#fff', overflow: 'hidden' }}>
@@ -160,12 +162,12 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                     {!isMobile && (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             <CodeIcon sx={{ color: '#3b82f6', fontSize: 20 }} />
-                            <Typography sx={{ fontWeight: 800, fontSize: '0.9rem', mr: 2 }}>Платформа</Typography>
+                            <Typography sx={{ fontWeight: 800, fontSize: '0.9rem', mr: 2 }}>{tr('Платформа', 'Platform')}</Typography>
 
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'rgba(255,255,255,0.4)' }}>
-                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{lesson.module?.course?.title || 'Курс'}</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{lesson.module?.course?.title || tr('Курс', 'Course')}</Typography>
                                 <ChevronRightIcon sx={{ fontSize: 14 }} />
-                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{lesson.module?.title || 'Модуль'}</Typography>
+                                <Typography variant="caption" sx={{ fontWeight: 600 }}>{lesson.module?.title || tr('Модуль', 'Module')}</Typography>
                                 <ChevronRightIcon sx={{ fontSize: 14 }} />
                                 <Typography variant="caption" sx={{ fontWeight: 700, color: '#3b82f6' }}>{lesson.title}</Typography>
                             </Box>
@@ -220,9 +222,9 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                     '& .MuiTabs-indicator': { bgcolor: '#3b82f6', height: 3, borderRadius: '3px 3px 0 0' }
                                 }}
                             >
-                                <Tab icon={<AssignmentIcon sx={{ fontSize: 20 }} />} label="Умова" />
-                                <Tab icon={<CodeIcon sx={{ fontSize: 20 }} />} label="Код" />
-                                <Tab icon={<TerminalIcon sx={{ fontSize: 20 }} />} label="Результат" />
+                                <Tab icon={<AssignmentIcon sx={{ fontSize: 20 }} />} label={tr('Умова', 'Task')} />
+                                <Tab icon={<CodeIcon sx={{ fontSize: 20 }} />} label={tr('Код', 'Code')} />
+                                <Tab icon={<TerminalIcon sx={{ fontSize: 20 }} />} label={tr('Результат', 'Result')} />
                             </Tabs>
                         </Box>
                     )}
@@ -244,15 +246,15 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                     {isDifficultyLocked ? (
                                         <Box sx={{ pt: 10, textAlign: 'center' }}>
                                             <LockIcon sx={{ fontSize: 32, color: '#3b82f6', mb: 1.5 }} />
-                                            <Typography variant="subtitle1" fontWeight="800">Рівень заблоковано</Typography>
+                                            <Typography variant="subtitle1" fontWeight="800">{tr('Рівень заблоковано', 'Level locked')}</Typography>
                                             <Typography variant="caption" sx={{ display: 'block', mt: 0.5, color: 'rgba(255,255,255,0.4)', px: 3, fontSize: '0.75rem' }}>
-                                                Пройдіть попередні завдання, щоб отримати доступ.
+                                                {tr('Пройдіть попередні завдання, щоб отримати доступ.', 'Complete the previous tasks to unlock it.')}
                                             </Typography>
                                         </Box>
                                     ) : (
                                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                                             <Typography variant="caption" sx={{ color: '#3b82f6', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1 }}>
-                                                {lesson.module?.title || 'МОДУЛЬ 1'} • {lesson.difficulty || 'БАЗОВИЙ'}
+                                                {lesson.module?.title || tr('МОДУЛЬ 1', 'MODULE 1')} • {lesson.difficulty || tr('БАЗОВИЙ', 'BASIC')}
                                             </Typography>
                                             <Typography variant="h6" sx={{ fontWeight: 800, mt: 1, mb: 2, fontSize: '1.25rem' }}>
                                                 {lesson.title}
@@ -283,7 +285,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                             <Typography sx={{ color: '#60a5fa', fontSize: 16, fontWeight: 900, fontFamily: 'serif', fontStyle: 'italic' }}>i</Typography>
                                                         </Box>
                                                         <Typography variant="caption" sx={{ color: '#93c5fd', fontWeight: 500, lineHeight: 1.5, fontSize: '0.8rem' }}>
-                                                            Використовуйте стандартні потоки введення-виведення cin та cout для зчитування та виведення даних.
+                                                            {tr('Використовуйте стандартні потоки введення-виведення cin та cout для зчитування та виведення даних.', 'Use the standard cin and cout streams to read input and print output.')}
                                                         </Typography>
                                                     </Box>
                                                 </>
@@ -350,7 +352,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                             py: 0.4
                                                         }}
                                                     >
-                                                        {isRunning ? 'Виконання...' : 'Run'}
+                                                        {isRunning ? tr('Виконання...', 'Running...') : 'Run'}
                                                     </Button>
                                                     {/* Submit — tests + Gemini hint */}
                                                     <Button
@@ -369,7 +371,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                             py: 0.4
                                                         }}
                                                     >
-                                                        {submitting ? 'Перевірка...' : 'Submit'}
+                                                        {submitting ? tr('Перевірка...', 'Checking...') : 'Submit'}
                                                     </Button>
                                                 </Box>
                                             )}
@@ -431,7 +433,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                         {/* Console header with mode badge */}
                                         <Box sx={{ p: 1.5, px: 3, bgcolor: '#0f172a', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', gap: 2 }}>
                                             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 800, letterSpacing: 1.5, fontSize: 9 }}>
-                                                КОНСОЛЬ ВИВОДУ
+                                                {tr('КОНСОЛЬ ВИВОДУ', 'OUTPUT CONSOLE')}
                                             </Typography>
                                             {lastAction === 'run' && (
                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.25, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
@@ -452,7 +454,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                             {!lastAction && !isRunning && !submitting && (
                                                 <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                     <Typography sx={{ color: 'rgba(255,255,255,0.1)', fontWeight: 700, fontSize: '0.8rem' }}>
-                                                        Run — швидкий запуск · Submit — перевірка тестів
+                                                        {tr('Run — швидкий запуск · Submit — перевірка тестів', 'Run — quick run · Submit — check against tests')}
                                                     </Typography>
                                                 </Box>
                                             )}
@@ -462,7 +464,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                 <Box sx={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5 }}>
                                                     <CircularProgress size={16} sx={{ color: 'rgba(255,255,255,0.3)' }} />
                                                     <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700, fontSize: '0.8rem' }}>
-                                                        {isRunning ? 'Виконання...' : 'Перевірка тестів...'}
+                                                        {isRunning ? tr('Виконання...', 'Running...') : tr('Перевірка тестів...', 'Running tests...')}
                                                     </Typography>
                                                 </Box>
                                             )}
@@ -515,10 +517,10 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                                                                 {/* Input */}
                                                                 <Box>
-                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700, fontSize: '0.7rem', letterSpacing: 0.5 }}>Вхідні дані =</Typography>
+                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700, fontSize: '0.7rem', letterSpacing: 0.5 }}>{tr('Вхідні дані =', 'Input =')}</Typography>
                                                                     <Box sx={{ mt: 0.75, p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
                                                                         <Typography sx={{ color: '#e2e8f0', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', whiteSpace: 'pre-wrap' }}>
-                                                                            {c.input || '(порожньо)'}
+                                                                            {c.input || tr('(порожньо)', '(empty)')}
                                                                         </Typography>
                                                                     </Box>
                                                                 </Box>
@@ -526,7 +528,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                                 {/* Expected (optional but helpful) */}
                                                                 {!c.passed && c.expected && (
                                                                     <Box>
-                                                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700, fontSize: '0.7rem', letterSpacing: 0.5 }}>Очікувано =</Typography>
+                                                                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700, fontSize: '0.7rem', letterSpacing: 0.5 }}>{tr('Очікувано =', 'Expected =')}</Typography>
                                                                         <Box sx={{ mt: 0.75, p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.1)' }}>
                                                                             <Typography sx={{ color: '#10b981', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', whiteSpace: 'pre-wrap' }}>
                                                                                 {c.expected}
@@ -537,7 +539,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
 
                                                                 {/* Output */}
                                                                 <Box>
-                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700, fontSize: '0.7rem', letterSpacing: 0.5 }}>Вивід =</Typography>
+                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.35)', fontWeight: 700, fontSize: '0.7rem', letterSpacing: 0.5 }}>{tr('Вивід =', 'Output =')}</Typography>
                                                                     <Box sx={{ mt: 0.75, p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
                                                                         {c.stderr && c.exitCode !== 0 ? (
                                                                             <Typography sx={{ color: '#f87171', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', whiteSpace: 'pre-wrap' }}>
@@ -545,7 +547,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                                             </Typography>
                                                                         ) : (
                                                                             <Typography sx={{ color: c.passed ? '#10b981' : '#f87171', fontFamily: "'JetBrains Mono', monospace", fontSize: '0.85rem', whiteSpace: 'pre-wrap' }}>
-                                                                                {c.stdout || '(немає виводу)'}
+                                                                                {c.stdout || tr('(немає виводу)', '(no output)')}
                                                                             </Typography>
                                                                         )}
                                                                     </Box>
@@ -564,13 +566,13 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                                                                 <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#ef4444' }} />
                                                                 <Typography sx={{ color: '#ef4444', fontWeight: 800, fontSize: '0.85rem' }}>
-                                                                    Тест №{result.testResults?.find((r: any) => !r.passed)?.index || 1}: НЕ ПРОЙДЕНО
+                                                                    {tr('Тест №', 'Test #')}{result.testResults?.find((r: any) => !r.passed)?.index || 1}: {tr('НЕ ПРОЙДЕНО', 'FAILED')}
                                                                 </Typography>
                                                             </Box>
 
                                                             <Grid container spacing={2} sx={{ mb: 4 }}>
                                                                 <Grid size={4}>
-                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>Вхідні дані:</Typography>
+                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>{tr('Вхідні дані:', 'Input:')}</Typography>
                                                                 </Grid>
                                                                 <Grid size={8}>
                                                                     <Typography variant="body2" sx={{ fontFamily: "'JetBrains Mono', monospace", color: '#fff', fontWeight: 600 }}>
@@ -579,7 +581,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                                 </Grid>
 
                                                                 <Grid size={4}>
-                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>Очікувано:</Typography>
+                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>{tr('Очікувано:', 'Expected:')}</Typography>
                                                                 </Grid>
                                                                 <Grid size={8}>
                                                                     <Typography variant="body2" sx={{ fontFamily: "'JetBrains Mono', monospace", color: '#10b981', fontWeight: 800, wordBreak: 'break-all' }}>
@@ -588,7 +590,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                                 </Grid>
 
                                                                 <Grid size={4}>
-                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>Отримано:</Typography>
+                                                                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>{tr('Отримано:', 'Got:')}</Typography>
                                                                 </Grid>
                                                                 <Grid size={8}>
                                                                     <Typography variant="body2" sx={{ fontFamily: "'JetBrains Mono', monospace", color: '#ef4444', fontWeight: 800, wordBreak: 'break-all' }}>
@@ -605,7 +607,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                             }}>
                                                                 <Typography sx={{ color: 'rgba(255,255,255,0.2)', fontSize: 18, mt: -0.5 }}>💡</Typography>
                                                                 <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', fontStyle: 'italic', lineHeight: 1.5 }}>
-                                                                    {result.hint || 'Порада: Спробуйте ще раз, звертаючи увагу на умову задачі.'}
+                                                                    {result.hint || tr('Порада: Спробуйте ще раз, звертаючи увагу на умову задачі.', 'Tip: try again, paying close attention to the task statement.')}
                                                                 </Typography>
                                                             </Box>
                                                         </Box>
@@ -614,10 +616,10 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 4, gap: 2 }}>
                                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                                                 <CheckCircleIcon sx={{ color: '#10b981', fontSize: 28 }} />
-                                                                <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', color: '#10b981' }}>Прийнято</Typography>
+                                                                <Typography sx={{ fontWeight: 800, fontSize: '1.1rem', color: '#10b981' }}>{tr('Прийнято', 'Accepted')}</Typography>
                                                             </Box>
                                                             <Typography sx={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem' }}>
-                                                                Усі {result.testResults?.length || ''} тестів пройдено успішно
+                                                                {tr('Усі', 'All')} {result.testResults?.length || ''} {tr('тестів пройдено успішно', 'tests passed')}
                                                             </Typography>
                                                             <Button
                                                                 onClick={() => handleMarkComplete(true)}
@@ -625,7 +627,7 @@ export default function LessonPage({ params: paramsPromise }: { params: Promise<
                                                                 fullWidth={isMobile}
                                                                 sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' }, borderRadius: 2, px: 4, py: 1, fontWeight: 800, fontSize: '0.85rem', mt: 1 }}
                                                             >
-                                                                ПРОДОВЖИТИ
+                                                                {tr('ПРОДОВЖИТИ', 'CONTINUE')}
                                                             </Button>
                                                         </Box>
                                                     )}

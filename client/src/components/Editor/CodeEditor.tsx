@@ -2,6 +2,7 @@
 import React, { useRef } from 'react';
 import Editor, { OnMount } from '@monaco-editor/react';
 import { Box, Paper, Typography, CircularProgress, useTheme } from '@mui/material';
+import { useT } from '@/lib/i18n';
 
 interface CodeEditorProps {
     initialCode?: string;
@@ -26,6 +27,7 @@ export default function CodeEditor({
     height = '500px',
     readOnly = false,
 }: CodeEditorProps) {
+    const tr = useT();
     const editorRef = useRef(null);
     const theme = useTheme();
 
@@ -47,10 +49,10 @@ export default function CodeEditor({
                 alignItems: 'center'
             }}>
                 <Typography variant="subtitle2" fontWeight="bold" color="text.secondary">
-                    Редактор C++
+                    {tr('Редактор C++', 'C++ Editor')}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                    {readOnly ? 'Тільки для читання' : 'Інтерактивний'}
+                    {readOnly ? tr('Тільки для читання', 'Read-only') : tr('Інтерактивний', 'Interactive')}
                 </Typography>
             </Box>
             <Editor

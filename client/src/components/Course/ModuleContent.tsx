@@ -5,6 +5,7 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 import axios from 'axios';
 import DifficultyTabs from './DifficultyTabs';
 import { useAuth } from '@/context/AuthContext';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -13,6 +14,7 @@ interface ModuleContentProps {
 }
 
 export default function ModuleContent({ moduleId }: ModuleContentProps) {
+    const tr = useT();
     const { token, isLoading: authLoading } = useAuth();
     const [statusData, setStatusData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -48,7 +50,7 @@ export default function ModuleContent({ moduleId }: ModuleContentProps) {
     if (error || !statusData) {
         return (
             <Typography color="error" variant="body2" sx={{ p: 2 }}>
-                Не вдалося завантажити уроки модуля.
+                {tr('Не вдалося завантажити уроки модуля.', 'Couldn’t load the module’s lessons.')}
             </Typography>
         );
     }

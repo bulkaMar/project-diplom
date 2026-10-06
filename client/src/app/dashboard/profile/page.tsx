@@ -11,6 +11,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import ShieldIcon from '@mui/icons-material/Shield';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { api } from '@/lib/api';
+import { useT } from '@/lib/i18n';
 
 interface Stats {
     courses: number;
@@ -40,6 +41,7 @@ interface AdminConfig {
 }
 
 export default function ProfilePage() {
+    const tr = useT();
     const { user, token, isLoading: authLoading, refreshProfile } = useAuth();
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
@@ -132,7 +134,7 @@ export default function ProfilePage() {
             setIsEditing(false);
         } catch (err: any) {
             console.error('Failed to update profile', err);
-            setSaveError(err.message || 'Помилка при оновленні профілю');
+            setSaveError(err.message || tr('Помилка при оновленні профілю', 'Failed to update profile'));
         } finally {
             setIsLoading(false);
         }
@@ -143,10 +145,10 @@ export default function ProfilePage() {
         setIsLoading(true);
         try {
             await api.patch('/admin/config', adminConfig, token);
-            alert('Системні налаштування змінено');
+            alert(tr('Системні налаштування змінено', 'System settings updated'));
         } catch (err) {
             console.error('Failed to save config', err);
-            alert('Помилка збереження налаштувань');
+            alert(tr('Помилка збереження налаштувань', 'Failed to save settings'));
         } finally {
             setIsLoading(false);
         }
@@ -171,10 +173,10 @@ export default function ProfilePage() {
 
     const getRoleLabel = (role: string) => {
         switch (role) {
-            case 'ADMIN': return 'Адміністратор';
-            case 'TEACHER': return 'Викладач';
-            case 'STUDENT': return 'Студент';
-            case 'APPLICANT': return 'Абітурієнт';
+            case 'ADMIN': return tr('Адміністратор', 'Administrator');
+            case 'TEACHER': return tr('Викладач', 'Teacher');
+            case 'STUDENT': return tr('Студент', 'Student');
+            case 'APPLICANT': return tr('Абітурієнт', 'Applicant');
             default: return role;
         }
     };
@@ -188,7 +190,7 @@ export default function ProfilePage() {
                     startIcon={<ArrowBackIcon />}
                     sx={{ color: '#6e7589', textTransform: 'none', '&:hover': { color: '#fff' } }}
                 >
-                    Назад до дошки
+                    {tr('Назад до дошки', 'Back to board')}
                 </Button>
             </Box>
 
@@ -201,7 +203,7 @@ export default function ProfilePage() {
                 </div>
                 
                 <div className={styles.titleSection}>
-                    <h1>{user.name || 'Користувач'}</h1>
+                    <h1>{user.name || tr('Користувач', 'User')}</h1>
                     <p className={styles.email}>{user.email}</p>
                     <div className={styles.roleBadge}>
                         <ShieldIcon sx={{ fontSize: 16 }} />
@@ -216,11 +218,11 @@ export default function ProfilePage() {
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                         <h3 className={styles.cardTitle} style={{ margin: 0 }}>
                             <BadgeIcon sx={{ color: '#3b82f6' }} />
-                            Деталі акаунту
+                            {tr('Деталі акаунту', 'Account details')}
                         </h3>
                         {!isEditing && (
                             <button className={styles.editBtn} onClick={() => setIsEditing(true)}>
-                                Редагувати
+                                {tr('Редагувати', 'Edit')}
                             </button>
                         )}
                     </Box>
@@ -228,28 +230,28 @@ export default function ProfilePage() {
                     {!isEditing ? (
                         <div className={styles.detailsView}>
                             <div className={styles.detailRow}>
-                                <span className={styles.detailLabel}>Повне ім'я</span>
-                                <span className={styles.detailValue}>{user.name || 'Не вказано'}</span>
+                                <span className={styles.detailLabel}>{tr('Повне ім\'я', 'Full name')}</span>
+                                <span className={styles.detailValue}>{user.name || tr('Не вказано', 'Not set')}</span>
                             </div>
 
                             <div className={styles.detailRow}>
-                                <span className={styles.detailLabel}>Електронна пошта</span>
+                                <span className={styles.detailLabel}>{tr('Електронна пошта', 'Email')}</span>
                                 <span className={styles.detailValue}>{user.email}</span>
                             </div>
                         </div>
                     ) : (
                         <div className={styles.editSection}>
                             <div className={styles.detailRow}>
-                                <label className={styles.detailLabel}>Повне ім'я</label>
+                                <label className={styles.detailLabel}>{tr('Повне ім\'я', 'Full name')}</label>
                                 <input 
                                     className={styles.editInput}
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    placeholder="Ваше ім'я"
+                                    placeholder={tr('Ваше ім\'я', 'Your name')}
                                 />
                             </div>
                             <div className={styles.detailRow}>
-                                <label className={styles.detailLabel}>Електронна пошта</label>
+                                <label className={styles.detailLabel}>{tr('Електронна пошта', 'Email')}</label>
                                 <input 
                                     className={styles.editInput}
                                     type="email"
@@ -264,7 +266,7 @@ export default function ProfilePage() {
                                     onClick={handleSave}
                                     disabled={isLoading}
                                 >
-                                    {isLoading ? 'Збереження...' : 'Зберегти зміни'}
+                                    {isLoading ? tr('Збереження...', 'Saving...') : tr('Зберегти зміни', 'Save changes')}
                                 </button>
                                 <button 
                                     className={styles.cancelBtn} 
@@ -276,7 +278,7 @@ export default function ProfilePage() {
                                     }}
                                     disabled={isLoading}
                                 >
-                                    Скасувати
+                                    {tr('Скасувати', 'Cancel')}
                                 </button>
                             </div>
                             {saveError && (
@@ -309,7 +311,7 @@ export default function ProfilePage() {
                         <>
                             <h3 className={styles.cardTitle}>
                                 <ShieldIcon sx={{ color: '#8197ff' }} />
-                                Системні налаштування
+                                {tr('Системні налаштування', 'System settings')}
                             </h3>
                             
                             {configLoading ? (
@@ -321,8 +323,8 @@ export default function ProfilePage() {
                                     <div className={styles.detailRow} style={{ borderBottom: '1px solid rgba(129, 151, 255, 0.1)', paddingBottom: '1.5rem' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <div>
-                                                <label className={styles.detailLabel} style={{ marginBottom: '0.2rem' }}>Система порад (ШІ)</label>
-                                                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>Вимкнення підказок для всіх студентів</span>
+                                                <label className={styles.detailLabel} style={{ marginBottom: '0.2rem' }}>{tr('Система порад (ШІ)', 'AI hint system')}</label>
+                                                <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>{tr('Вимкнення підказок для всіх студентів', 'Turn off hints for all students')}</span>
                                             </div>
                                             <div 
                                                 className={`${styles.cyberToggle} ${adminConfig.adviceSystemActive ? styles.toggleActive : ''}`}
@@ -339,13 +341,13 @@ export default function ProfilePage() {
                                     </div>
                                     
                                     <div className={styles.detailRow} style={{ marginTop: '1rem' }}>
-                                        <label className={styles.detailLabel}>Gemini API Ключ</label>
+                                        <label className={styles.detailLabel}>{tr('Gemini API Ключ', 'Gemini API key')}</label>
                                         <input 
                                             className={styles.editInput}
                                             type="password"
                                             value={adminConfig.geminiApiKey || ''}
                                             onChange={(e) => setAdminConfig({...adminConfig, geminiApiKey: e.target.value})}
-                                            placeholder="Введіть ваш ключ..."
+                                            placeholder={tr('Введіть ваш ключ...', 'Enter your key...')}
                                         />
                                     </div>
                                     <button 
@@ -354,18 +356,18 @@ export default function ProfilePage() {
                                         onClick={handleSaveConfig}
                                         disabled={isLoading}
                                     >
-                                        {isLoading ? 'Збереження...' : 'Зберегти глобальні налаштування'}
+                                        {isLoading ? tr('Збереження...', 'Saving...') : tr('Зберегти глобальні налаштування', 'Save global settings')}
                                     </button>
                                 </div>
                             ) : (
-                                <Typography color="error" variant="body2">Не вдалося завантажити налаштування</Typography>
+                                <Typography color="error" variant="body2">{tr('Не вдалося завантажити налаштування', 'Couldn’t load settings')}</Typography>
                             )}
                         </>
                     ) : user.role === 'TEACHER' ? (
                         <>
                             <h3 className={styles.cardTitle}>
                                 <AccountCircleIcon sx={{ color: '#8197ff' }} />
-                                Мої курси та студенти
+                                {tr('Мої курси та студенти', 'My courses and students')}
                             </h3>
 
                             {/* Summary tiles */}
@@ -373,15 +375,15 @@ export default function ProfilePage() {
                                 <div className={styles.statsGrid} style={{ marginBottom: '1.25rem' }}>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{teacherStats.totalCourses}</span>
-                                        <span className={styles.statLabel}>Всього курсів</span>
+                                        <span className={styles.statLabel}>{tr('Всього курсів', 'Total courses')}</span>
                                     </div>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{teacherStats.publishedCourses}</span>
-                                        <span className={styles.statLabel}>Опублікованих</span>
+                                        <span className={styles.statLabel}>{tr('Опублікованих', 'Published')}</span>
                                     </div>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{teacherStats.totalStudents}</span>
-                                        <span className={styles.statLabel}>Студентів</span>
+                                        <span className={styles.statLabel}>{tr('Студентів', 'Students')}</span>
                                     </div>
                                 </div>
                             )}
@@ -413,7 +415,7 @@ export default function ProfilePage() {
                                             </div>
                                             <div style={{ display: 'flex', gap: '1rem', flexShrink: 0, marginLeft: '0.5rem' }}>
                                                 <span style={{ fontSize: '0.75rem', color: '#6e7589' }}>
-                                                    {course.modulesCount} мод.
+                                                    {course.modulesCount} {tr('мод.', 'mod.')}
                                                 </span>
                                                 <span style={{ fontSize: '0.75rem', color: '#86adff', fontWeight: 600 }}>
                                                     👥 {course.studentsCount}
@@ -423,14 +425,14 @@ export default function ProfilePage() {
                                     ))}
                                 </div>
                             ) : (
-                                <Typography variant="body2" sx={{ color: '#6e7589' }}>Курсів ще немає. Створіть перший курс в редакторі.</Typography>
+                                <Typography variant="body2" sx={{ color: '#6e7589' }}>{tr('Курсів ще немає. Створіть перший курс в редакторі.', 'No courses yet. Create your first one in the editor.')}</Typography>
                             )}
                         </>
                     ) : (
                         <>
                             <h3 className={styles.cardTitle}>
                                 <AccountCircleIcon sx={{ color: '#8197ff' }} />
-                                Статистика навчання
+                                {tr('Статистика навчання', 'Learning stats')}
                             </h3>
                             
                             {statsLoading ? (
@@ -441,23 +443,23 @@ export default function ProfilePage() {
                                 <div className={styles.statsGrid}>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{stats.courses}</span>
-                                        <span className={styles.statLabel}>Курсів</span>
+                                        <span className={styles.statLabel}>{tr('Курсів', 'Courses')}</span>
                                     </div>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{stats.lessons}</span>
-                                        <span className={styles.statLabel}>Уроків</span>
+                                        <span className={styles.statLabel}>{tr('Уроків', 'Lessons')}</span>
                                     </div>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{stats.practices}</span>
-                                        <span className={styles.statLabel}>Практик</span>
+                                        <span className={styles.statLabel}>{tr('Практик', 'Practice tasks')}</span>
                                     </div>
                                     <div className={styles.statItem}>
                                         <span className={styles.statNumber}>{stats.avgScore}%</span>
-                                        <span className={styles.statLabel}>Середній бал</span>
+                                        <span className={styles.statLabel}>{tr('Середній бал', 'Average score')}</span>
                                     </div>
                                 </div>
                             ) : (
-                                <Typography color="error" variant="body2">Не вдалося завантажити статистику</Typography>
+                                <Typography color="error" variant="body2">{tr('Не вдалося завантажити статистику', 'Couldn’t load stats')}</Typography>
                             )}
                         </>
                     )}

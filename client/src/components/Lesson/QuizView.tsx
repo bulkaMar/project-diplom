@@ -11,6 +11,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useT } from '@/lib/i18n';
 
 interface Question {
     question: string;
@@ -27,6 +28,7 @@ interface QuizViewProps {
 }
 
 export default function QuizView({ content, questions, onComplete }: QuizViewProps) {
+    const tr = useT();
     const [quizData, setQuizData] = useState<{ questions: Question[] }>({ questions: [] });
     const [currentStep, setCurrentStep] = useState(0);
     const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -66,14 +68,14 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                     setQuizData({ questions: parsed });
                     setError(null);
                 } else {
-                    setError('Неправильний формат тесту: відсутній масив запитань.');
+                    setError(tr('Неправильний формат тесту: відсутній масив запитань.', 'Invalid quiz format: questions array is missing.'));
                 }
             } catch (e) {
                 console.error("Failed to parse quiz content:", e);
                 // If content is not JSON, it might just be markdown/description, 
                 // but we need questions to run a quiz.
                 if (!questions) {
-                    setError('Не вдалося завантажити дані тесту.');
+                    setError(tr('Не вдалося завантажити дані тесту.', 'Couldn’t load the quiz.'));
                 }
             }
         }
@@ -113,7 +115,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
         return (
             <Box sx={{ p: 4, textAlign: 'center' }}>
                 <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
-                <Button variant="outlined" onClick={() => onComplete(false, 0)}>Пропустити тест</Button>
+                <Button variant="outlined" onClick={() => onComplete(false, 0)}>{tr('Пропустити тест', 'Skip quiz')}</Button>
             </Box>
         );
     }
@@ -145,20 +147,20 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                             color: isPassed ? '#4ade80' : '#ff716c',
                             fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', mb: 2
                         }}>
-                            Результат: {isPassed ? 'Успішно' : 'Недостатньо'}
+                            {tr('Результат', 'Result')}: {isPassed ? tr('Успішно', 'Passed') : tr('Недостатньо', 'Not enough')}
                         </Box>
                         
                         <Typography variant="h3" sx={{ fontWeight: 800, color: '#dfe5fc', mb: 2, fontSize: { xs: '2rem', md: '2.5rem' }, lineHeight: 1.2 }}>
-                            {isPassed ? 'Відмінна робота!' : 'Спробуйте ще раз!'} <br/>
+                            {isPassed ? tr('Відмінна робота!', 'Great job!') : tr('Спробуйте ще раз!', 'Try again!')} <br/>
                             <Box component="span" sx={{ color: isPassed ? '#4ade80' : '#ff716c' }}>
-                                {isPassed ? 'Тест пройдено' : 'Недостатньо балів'}
+                                {isPassed ? tr('Тест пройдено', 'Quiz passed') : tr('Недостатньо балів', 'Not enough points')}
                             </Box>
                         </Typography>
                         
                         <Typography sx={{ color: '#a4abc0', fontSize: '0.875rem', maxWidth: 450, mx: { xs: 'auto', md: 0 }, mb: 4, lineHeight: 1.6 }}>
                             {isPassed 
-                                ? 'Ваші знання на високому рівні. Ви готові рухатися далі і вивчати складніші концепції C++.'
-                                : "Майстерність у C++ вимагає часу та уваги до деталей. Ваш поточний результат показує прогалини в розумінні теми."}
+                                ? tr('Ваші знання на високому рівні. Ви готові рухатися далі і вивчати складніші концепції C++.', 'Your knowledge is solid. You’re ready to move on to more advanced C++ concepts.')
+                                : tr('Майстерність у C++ вимагає часу та уваги до деталей. Ваш поточний результат показує прогалини в розумінні теми.', 'Mastering C++ takes time and attention to detail. Your result shows some gaps in understanding this topic.')}
                         </Typography>
                         
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: { xs: 'center', md: 'flex-start' } }}>
@@ -182,7 +184,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                 }}
                             >
                                 <RefreshIcon sx={{ fontSize: 18 }} />
-                                {isPassed ? 'Продовжити навчання' : 'Пройти ще раз'}
+                                {isPassed ? tr('Продовжити навчання', 'Continue learning') : tr('Пройти ще раз', 'Retake')}
                             </Button>
                             
                             {!isPassed && (
@@ -196,7 +198,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                     }}
                                 >
                                     <MenuBookIcon sx={{ fontSize: 18 }} />
-                                    Повторити теорію
+                                    {tr('Повторити теорію', 'Review theory')}
                                 </Button>
                             )}
                         </Box>
@@ -213,7 +215,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                 {Math.round(progressScore)}%
                             </Typography>
                             <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '-0.05em', mt: 0.5 }}>
-                                {correctCount} з {quizData.questions.length} правильних
+                                {correctCount} {tr('з', 'of')} {quizData.questions.length} {tr('правильних', 'correct')}
                             </Typography>
                         </Box>
                     </Box>
@@ -227,7 +229,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                 <AccessTimeIcon sx={{ color: '#86adff', fontSize: 20 }} />
                             </Box>
                             <Box>
-                                <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em' }}>Час</Typography>
+                                <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em' }}>{tr('Час', 'Time')}</Typography>
                                 <Typography sx={{ fontSize: '1.125rem', fontWeight: 800, color: '#dfe5fc' }}>{formatTime(timeSpent)}</Typography>
                             </Box>
                         </Box>
@@ -238,8 +240,8 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                 <ErrorOutlineIcon sx={{ color: '#ff716c', fontSize: 20 }} />
                             </Box>
                             <Box>
-                                <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em' }}>Помилок</Typography>
-                                <Typography sx={{ fontSize: '1.125rem', fontWeight: 800, color: '#dfe5fc' }}>{quizData.questions.length - correctCount} питань</Typography>
+                                <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em' }}>{tr('Помилок', 'Mistakes')}</Typography>
+                                <Typography sx={{ fontSize: '1.125rem', fontWeight: 800, color: '#dfe5fc' }}>{quizData.questions.length - correctCount} {tr('питань', 'questions')}</Typography>
                             </Box>
                         </Box>
                     </Grid>
@@ -248,8 +250,8 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                 {/* Detailed Analysis */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 10 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                        <Typography variant="h5" sx={{ fontWeight: 800, color: '#dfe5fc' }}>Аналіз відповідей</Typography>
-                        <Typography sx={{ fontSize: '0.75rem', color: '#a4abc0', fontWeight: 500 }}>Всі {quizData.questions.length} питань</Typography>
+                        <Typography variant="h5" sx={{ fontWeight: 800, color: '#dfe5fc' }}>{tr('Аналіз відповідей', 'Answer review')}</Typography>
+                        <Typography sx={{ fontSize: '0.75rem', color: '#a4abc0', fontWeight: 500 }}>{tr('Всі', 'All')} {quizData.questions.length} {tr('питань', 'questions')}</Typography>
                     </Box>
                     
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -265,7 +267,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                 }}>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                                         <Typography sx={{ fontSize: '0.625rem', color: isCorrect ? '#4ade80' : '#ff716c', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.1em' }}>
-                                            Питання {idx + 1} • {isCorrect ? 'Вірно' : 'Невірно'}
+                                            {tr('Питання', 'Question')} {idx + 1} • {isCorrect ? tr('Вірно', 'Correct') : tr('Невірно', 'Incorrect')}
                                         </Typography>
                                         {isCorrect ? (
                                             <CheckCircleIcon sx={{ color: '#4ade80', fontSize: 18 }} />
@@ -296,10 +298,10 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                                 p: 1.5, borderRadius: 1
                                             }}>
                                                 <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, mb: 0.5 }}>
-                                                    {isCorrect ? 'Ваша відповідь (Вірно)' : 'Ваша відповідь'}
+                                                    {isCorrect ? tr('Ваша відповідь (Вірно)', 'Your answer (Correct)') : tr('Ваша відповідь', 'Your answer')}
                                                 </Typography>
                                                 <Typography sx={{ color: isCorrect ? '#4ade80' : '#ff716c', fontWeight: 700, fontSize: '0.875rem' }}>
-                                                    {isSkipped ? 'Не вказано' : q.options[userAnswerIdx]}
+                                                    {isSkipped ? tr('Не вказано', 'Not answered') : q.options[userAnswerIdx]}
                                                 </Typography>
                                             </Box>
                                         </Grid>
@@ -311,7 +313,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                                     p: 1.5, borderRadius: 1
                                                 }}>
                                                     <Typography sx={{ color: '#a4abc0', fontSize: '0.625rem', textTransform: 'uppercase', fontWeight: 700, mb: 0.5 }}>
-                                                        Правильна відповідь
+                                                        {tr('Правильна відповідь', 'Correct answer')}
                                                     </Typography>
                                                     <Typography sx={{ color: '#4ade80', fontWeight: 700, fontSize: '0.875rem' }}>
                                                         {q.options[q.correctAnswer]}
@@ -339,18 +341,18 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', mb: 2 }}>
                     <Box>
                         <Typography variant="overline" sx={{ color: '#86adff', fontWeight: 800, letterSpacing: 2 }}>
-                            ТЕОРЕТИЧНИЙ МОДУЛЬ
+                            {tr('ТЕОРЕТИЧНИЙ МОДУЛЬ', 'THEORY MODULE')}
                         </Typography>
                         <Typography variant="h5" sx={{ fontWeight: 800, color: '#dfe5fc' }}>
-                            Тестування в процесі
+                            {tr('Тестування в процесі', 'Quiz in progress')}
                         </Typography>
                     </Box>
                     <Box sx={{ textAlign: 'right' }}>
                         <Typography variant="caption" sx={{ color: '#a4abc0', fontWeight: 700, letterSpacing: 1 }}>
-                            ПРОГРЕС: {Math.round(progress)}%
+                            {tr('ПРОГРЕС', 'PROGRESS')}: {Math.round(progress)}%
                         </Typography>
                         <Typography variant="h6" sx={{ fontWeight: 800, color: '#dfe5fc' }}>
-                            Питання {currentStep + 1} з {quizData.questions.length}
+                            {tr('Питання', 'Question')} {currentStep + 1} {tr('з', 'of')} {quizData.questions.length}
                         </Typography>
                     </Box>
                 </Box>
@@ -425,7 +427,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, color: '#8197ff' }}>
                                     <LightbulbIcon fontSize="small" />
                                     <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: 1.5 }}>
-                                        ПОКАЗАТИ ПІДКАЗКУ
+                                        {tr('ПОКАЗАТИ ПІДКАЗКУ', 'SHOW HINT')}
                                     </Typography>
                                 </Box>
                                 <ExpandMoreIcon sx={{
@@ -516,7 +518,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                             '&:hover': { color: '#86adff', borderColor: '#86adff' }
                         }}
                     >
-                        НАЗАД
+                        {tr('НАЗАД', 'BACK')}
                     </Button>
                     <Button
                         endIcon={<ArrowForwardIcon fontSize="small" />}
@@ -530,7 +532,7 @@ export default function QuizView({ content, questions, onComplete }: QuizViewPro
                             '&:disabled': { opacity: 0.5, color: '#002c67' }
                         }}
                     >
-                        {currentStep === quizData.questions.length - 1 ? 'ЗАВЕРШИТИ ТЕСТ' : 'НАСТУПНЕ ПИТАННЯ'}
+                        {currentStep === quizData.questions.length - 1 ? tr('ЗАВЕРШИТИ ТЕСТ', 'FINISH QUIZ') : tr('НАСТУПНЕ ПИТАННЯ', 'NEXT QUESTION')}
                     </Button>
                 </Box>
             </Box>

@@ -4,8 +4,10 @@ import { Suspense, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import styles from './callback.module.css';
+import { useT } from '@/lib/i18n';
 
 function AuthCallbackContent() {
+    const tr = useT();
     const { completeSocialLogin } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -26,17 +28,18 @@ function AuthCallbackContent() {
     return (
         <div className={styles.container}>
             <div className={styles.loader}></div>
-            <p className={styles.text}>Авторизація через Google...</p>
+            <p className={styles.text}>{tr('Авторизація через Google...', 'Signing in with Google...')}</p>
         </div>
     );
 }
 
 export default function AuthCallbackPage() {
+    const tr = useT();
     return (
         <Suspense fallback={
             <div className={styles.container}>
                 <div className={styles.loader}></div>
-                <p className={styles.text}>Завантаження...</p>
+                <p className={styles.text}>{tr('Завантаження...', 'Loading...')}</p>
             </div>
         }>
             <AuthCallbackContent />

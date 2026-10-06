@@ -30,25 +30,187 @@
 
 /* ---- Hero Section ---- */
 .simpleHeader {
-  padding: 3rem 0 0;
-  background: linear-gradient(180deg, rgba(134, 173, 255, 0.05) 0%, transparent 100%);
+  position: relative;
+  padding: 2.5rem 1.5rem 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(59, 107, 255, 0.14), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 90% 10%, rgba(139, 61, 255, 0.1), transparent 70%);
+}
+
+.welcomeBanner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.5rem 2.75rem;
+  margin-bottom: 3rem;
+  border-radius: 28px;
+  border: 1px solid rgba(124, 140, 255, 0.22);
+  background: linear-gradient(135deg, rgba(59, 107, 255, 0.16) 0%, rgba(139, 61, 255, 0.12) 55%, rgba(34, 211, 238, 0.06) 100%);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.welcomeBanner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(90deg, transparent 30%, #000);
+  pointer-events: none;
+}
+
+.bannerGlow {
+  position: absolute;
+  right: -10%;
+  top: -60%;
+  width: 55%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(91, 140, 255, 0.35), transparent 60%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.bannerText {
+  position: relative;
+  z-index: 1;
+}
+
+.bannerEyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8fb0ff;
+  margin-bottom: 0.75rem;
 }
 
 .welcomeTitle {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 2.25rem;
+  font-size: 2.6rem;
   font-weight: 700;
-  color: var(--on-surface);
-  margin-bottom: 0.25rem;
-  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.03em;
 }
 
 .welcomeSubtitle {
-  font-size: 1rem;
-  color: var(--outline);
+  font-size: 1.05rem;
+  color: #a9b4d6;
   font-weight: 500;
-  margin-bottom: 2rem;
-  opacity: 0.8;
+  margin: 0 0 1.75rem;
+}
+
+.bannerStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.bannerStat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1.1rem 0.7rem 0.75rem;
+  border-radius: 16px;
+  background: rgba(5, 10, 24, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.bannerStatIcon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: #9db8ff;
+  background: rgba(91, 140, 255, 0.15);
+}
+
+.bannerStatIcon :global(.material-symbols-outlined) {
+  font-size: 20px;
+}
+
+.bannerStatValue {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.bannerStatLabel {
+  font-size: 0.75rem;
+  color: #8792b5;
+}
+
+.bannerRing {
+  position: relative;
+  z-index: 1;
+  width: 170px;
+  height: 170px;
+  flex-shrink: 0;
+}
+
+.bannerRing svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 0 18px rgba(91, 140, 255, 0.45));
+}
+
+.ringTrack {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 7;
+}
+
+.ringValue {
+  fill: none;
+  stroke: url(#ringGrad);
+  stroke-width: 7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease;
+}
+
+.ringLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringPercent {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ringCaption {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8792b5;
+}
+
+@media (max-width: 720px) {
+  .welcomeBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 1.5rem;
+  }
+  .welcomeTitle { font-size: 2rem; }
+  .bannerRing { width: 130px; height: 130px; align-self: center; }
 }
 
 .sectionTitle {

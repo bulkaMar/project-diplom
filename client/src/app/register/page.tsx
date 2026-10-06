@@ -15,6 +15,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import styles from './register.module.css';
+import { useT } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -24,38 +25,40 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const GROUP_REGEX = /^[А-ЯҐЄІЇa-zA-ZА-Яа-яёА-Яа-я]{2,6}-\d{2}$/i;
 
-function validateEmail(v: string) {
-    if (!v) return 'Введіть email';
-    if (!EMAIL_REGEX.test(v)) return 'Невірний формат email (наприклад: user@example.com)';
+type Tr = (uk: string, en: string) => string;
+
+function validateEmail(v: string, tr: Tr) {
+    if (!v) return tr('Введіть email', 'Enter your email');
+    if (!EMAIL_REGEX.test(v)) return tr('Невірний формат email (наприклад: user@example.com)', 'Invalid email format (e.g. user@example.com)');
     return '';
 }
-function validateName(v: string) {
-    if (!v.trim()) return "Введіть ваше ім'я";
-    if (v.trim().length < 2) return "Ім'я має бути не менше 2 символів";
-    if (v.trim().length > 50) return "Ім'я занадто довге";
+function validateName(v: string, tr: Tr) {
+    if (!v.trim()) return tr('Введіть ваше ім\'я', 'Enter your name');
+    if (v.trim().length < 2) return tr('Ім\'я має бути не менше 2 символів', 'Name must be at least 2 characters');
+    if (v.trim().length > 50) return tr('Ім\'я занадто довге', 'Name is too long');
     return '';
 }
-function validatePassword(v: string) {
-    if (!v) return 'Введіть пароль';
-    if (v.length < 8) return 'Мінімум 8 символів';
-    if (!/[A-Z]/.test(v)) return 'Потрібна хоча б одна велика літера';
-    if (!/[a-z]/.test(v)) return 'Потрібна хоча б одна мала літера';
-    if (!/\d/.test(v)) return 'Потрібна хоча б одна цифра';
+function validatePassword(v: string, tr: Tr) {
+    if (!v) return tr('Введіть пароль', 'Enter a password');
+    if (v.length < 8) return tr('Мінімум 8 символів', 'At least 8 characters');
+    if (!/[A-Z]/.test(v)) return tr('Потрібна хоча б одна велика літера', 'Needs at least one uppercase letter');
+    if (!/[a-z]/.test(v)) return tr('Потрібна хоча б одна мала літера', 'Needs at least one lowercase letter');
+    if (!/\d/.test(v)) return tr('Потрібна хоча б одна цифра', 'Needs at least one digit');
     return '';
 }
-function validateConfirm(password: string, confirm: string) {
-    if (!confirm) return 'Підтвердіть пароль';
-    if (password !== confirm) return 'Паролі не співпадають';
+function validateConfirm(password: string, confirm: string, tr: Tr) {
+    if (!confirm) return tr('Підтвердіть пароль', 'Confirm your password');
+    if (password !== confirm) return tr('Паролі не співпадають', 'Passwords do not match');
     return '';
 }
-function validateGroup(v: string) {
+function validateGroup(v: string, tr: Tr) {
     if (!v) return ''; // Optional
-    if (!GROUP_REGEX.test(v.trim())) return 'Формат: ІПЗ-13 (літери-цифри)';
+    if (!GROUP_REGEX.test(v.trim())) return tr('Формат: ІПЗ-13 (літери-цифри)', 'Format: ІПЗ-13 (letters-digits)');
     return '';
 }
 
 // ─── Password strength ────────────────────────────────────────────────────────
-function getPasswordStrength(v: string): { label: string; color: string; width: string } {
+function getPasswordStrength(v: string, tr: Tr): { label: string; color: string; width: string } {
     if (!v) return { label: '', color: '#334155', width: '0%' };
     let score = 0;
     if (v.length >= 8) score++;
@@ -65,14 +68,15 @@ function getPasswordStrength(v: string): { label: string; color: string; width: 
     if (/\d/.test(v)) score++;
     if (/[^A-Za-z0-9]/.test(v)) score++;
 
-    if (score <= 2) return { label: 'Слабкий', color: '#ef4444', width: '25%' };
-    if (score <= 3) return { label: 'Середній', color: '#f59e0b', width: '50%' };
-    if (score <= 4) return { label: 'Хороший', color: '#3b82f6', width: '75%' };
-    return { label: 'Надійний', color: '#10b981', width: '100%' };
+    if (score <= 2) return { label: tr('Слабкий', 'Weak'), color: '#ef4444', width: '25%' };
+    if (score <= 3) return { label: tr('Середній', 'Fair'), color: '#f59e0b', width: '50%' };
+    if (score <= 4) return { label: tr('Хороший', 'Good'), color: '#3b82f6', width: '75%' };
+    return { label: tr('Надійний', 'Strong'), color: '#10b981', width: '100%' };
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function RegisterPage() {
+    const tr = useT();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -92,12 +96,12 @@ export default function RegisterPage() {
     const [submitError, setSubmitError] = useState('');
     const { register } = useAuth();
 
-    const nameErr     = validateName(name);
-    const emailErr    = validateEmail(email);
-    const passwordErr = validatePassword(password);
-    const confirmErr  = validateConfirm(password, confirmPassword);
-    const groupErr    = validateGroup(groupName);
-    const strength    = getPasswordStrength(password);
+    const nameErr     = validateName(name, tr);
+    const emailErr    = validateEmail(email, tr);
+    const passwordErr = validatePassword(password, tr);
+    const confirmErr  = validateConfirm(password, confirmPassword, tr);
+    const groupErr    = validateGroup(groupName, tr);
+    const strength    = getPasswordStrength(password, tr);
     const hasErrors   = !!(nameErr || emailErr || passwordErr || confirmErr || groupErr);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -113,7 +117,7 @@ export default function RegisterPage() {
                 groupName: groupName.trim().toUpperCase(),
             });
         } catch (err: any) {
-            setSubmitError(err.message || 'Помилка реєстрації. Спробуйте ще раз.');
+            setSubmitError(err.message || tr('Помилка реєстрації. Спробуйте ще раз.', 'Registration failed. Please try again.'));
         }
     };
 
@@ -132,8 +136,8 @@ export default function RegisterPage() {
             <main className={styles.container}>
                 <div className={styles.card}>
                     <div className={styles.brandHeader}>
-                        <h2 className={styles.brandTitle}>Реєстрація</h2>
-                        <p className={styles.brandSubtitle}>Станьте частиною спільноти C++ архітекторів</p>
+                        <h2 className={styles.brandTitle}>{tr('Реєстрація', 'Sign up')}</h2>
+                        <p className={styles.brandSubtitle}>{tr('Станьте частиною спільноти C++ архітекторів', 'Join the community of C++ architects')}</p>
                     </div>
 
                     {submitError && (
@@ -147,12 +151,12 @@ export default function RegisterPage() {
 
                         {/* Name */}
                         <div className={styles.fieldGroup}>
-                            <label className={styles.label}>Повне ім'я</label>
+                            <label className={styles.label}>{tr('Повне ім\'я', 'Full name')}</label>
                             <div className={`${styles.inputWrapper} ${touched.name && nameErr ? styles.inputError : touched.name && !nameErr ? styles.inputSuccess : ''}`}>
                                 <PersonOutlineIcon className={styles.inputIcon} />
                                 <input
                                     className={styles.input}
-                                    placeholder="Олександр Коваленко"
+                                    placeholder={tr('Олександр Коваленко', 'Alex Kovalenko')}
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -168,7 +172,7 @@ export default function RegisterPage() {
 
                         {/* Email */}
                         <div className={styles.fieldGroup}>
-                            <label className={styles.label}>Електронна пошта</label>
+                            <label className={styles.label}>{tr('Електронна пошта', 'Email')}</label>
                             <div className={`${styles.inputWrapper} ${touched.email && emailErr ? styles.inputError : touched.email && !emailErr ? styles.inputSuccess : ''}`}>
                                 <AlternateEmailIcon className={styles.inputIcon} />
                                 <input
@@ -189,7 +193,7 @@ export default function RegisterPage() {
 
                         {/* Group */}
                         <div className={styles.fieldGroup}>
-                            <label className={styles.label}>Номер групи</label>
+                            <label className={styles.label}>{tr('Номер групи', 'Group')}</label>
                             <div className={`${styles.inputWrapper} ${touched.group && groupErr ? styles.inputError : touched.group && !groupErr ? styles.inputSuccess : ''}`} style={{ position: 'relative' }}>
                                 <GroupsOutlinedIcon className={styles.inputIcon} />
                                 <input
@@ -234,13 +238,13 @@ export default function RegisterPage() {
                             </div>
                             {touched.group && groupErr
                                 ? <p className={styles.fieldError}>{groupErr}</p>
-                                : <p className={styles.fieldHint}>Наприклад: ІПЗ-13, ІПЗ-23, ІПЗ-33, ІПЗ-43</p>
+                                : <p className={styles.fieldHint}>{tr('Наприклад: ІПЗ-13, ІПЗ-23, ІПЗ-33, ІПЗ-43', 'For example: ІПЗ-13, ІПЗ-23, ІПЗ-33, ІПЗ-43')}</p>
                             }
                         </div>
 
                         {/* Password */}
                         <div className={styles.fieldGroup}>
-                            <label className={styles.label}>Пароль</label>
+                            <label className={styles.label}>{tr('Пароль', 'Password')}</label>
                             <div className={`${styles.inputWrapper} ${touched.password && passwordErr ? styles.inputError : touched.password && !passwordErr ? styles.inputSuccess : ''}`}>
                                 <LockOpenIcon className={styles.inputIcon} />
                                 <input
@@ -269,7 +273,7 @@ export default function RegisterPage() {
 
                         {/* Confirm password */}
                         <div className={styles.fieldGroup}>
-                            <label className={styles.label}>Підтвердження пароля</label>
+                            <label className={styles.label}>{tr('Підтвердження пароля', 'Confirm password')}</label>
                             <div className={`${styles.inputWrapper} ${touched.confirm && confirmErr ? styles.inputError : touched.confirm && !confirmErr ? styles.inputSuccess : ''}`}>
                                 <VerifiedUserIcon className={styles.inputIcon} />
                                 <input
@@ -289,7 +293,7 @@ export default function RegisterPage() {
                         </div>
 
                         <button type="submit" className={styles.submitBtn}>
-                            <span>Створити акаунт</span>
+                            <span>{tr('Створити акаунт', 'Create account')}</span>
                             <ArrowForwardIcon fontSize="small" />
                         </button>
                     </form>
@@ -298,7 +302,7 @@ export default function RegisterPage() {
                     <div className={styles.divider}>
                         <div className={styles.dividerInner}><hr className={styles.dividerLine} /></div>
                         <div className={styles.dividerLabelWrap}>
-                            <span className={styles.dividerLabel}>Або зареєструйтесь через</span>
+                            <span className={styles.dividerLabel}>{tr('Або зареєструйтесь через', 'Or sign up with')}</span>
                         </div>
                     </div>
 
@@ -310,13 +314,13 @@ export default function RegisterPage() {
                             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                         </svg>
-                        <span className={styles.socialLabel}>Зареєструватись через Google</span>
+                        <span className={styles.socialLabel}>{tr('Зареєструватись через Google', 'Sign up with Google')}</span>
                     </div>
 
                     <div className={styles.footerText}>
                         <p className={styles.footerP}>
-                            Вже маєте акаунт?
-                            <Link className={styles.footerLink} href="/login"> Увійти</Link>
+                            {tr('Вже маєте акаунт?', 'Already have an account?')}
+                            <Link className={styles.footerLink} href="/login">{tr(' Увійти', ' Log in')}</Link>
                         </p>
                     </div>
                 </div>

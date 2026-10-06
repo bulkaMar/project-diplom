@@ -11,10 +11,13 @@ import { Add as AddIcon } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
+import { useT, useLocale } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function AdminUsers() {
+    const tr = useT();
+    const locale = useLocale();
     const { token } = useAuth();
     const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -56,7 +59,7 @@ export default function AdminUsers() {
             await axios.post(`${API_URL}/admin/users/invite`, inviteData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setSnackbar({ open: true, message: 'Запрошення надіслано успішно!', severity: 'success' });
+            setSnackbar({ open: true, message: tr('Запрошення надіслано успішно!', 'Invitation sent!'), severity: 'success' });
             setIsInviteOpen(false);
             setInviteData({ email: '', role: 'TEACHER' });
             fetchUsers();
@@ -64,17 +67,17 @@ export default function AdminUsers() {
             console.error('Failed to invite user:', err);
             setSnackbar({ 
                 open: true, 
-                message: err.response?.data?.message || 'Помилка при надсиланні запрошення', 
+                message: err.response?.data?.message || tr('Помилка при надсиланні запрошення', 'Failed to send invitation'), 
                 severity: 'error' 
             });
         }
     };
 
     const roleMap: Record<string, string> = {
-        'ADMIN': 'Адмін',
-        'TEACHER': 'Викладач',
-        'STUDENT': 'Студент',
-        'APPLICANT': 'Абітурієнт'
+        'ADMIN': tr('Адмін', 'Admin'),
+        'TEACHER': tr('Викладач', 'Teacher'),
+        'STUDENT': tr('Студент', 'Student'),
+        'APPLICANT': tr('Абітурієнт', 'Applicant')
     };
 
     if (loading) return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />;
@@ -83,7 +86,7 @@ export default function AdminUsers() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Typography variant="h5" sx={{ color: '#fff', fontWeight: 900 }}>
-                    Користувачі системи
+                    {tr('Користувачі системи', 'Users')}
                 </Typography>
                 <Button 
                     variant="contained" 
@@ -98,7 +101,7 @@ export default function AdminUsers() {
                         '&:hover': { bgcolor: '#2563eb' }
                     }}
                 >
-                    Запросити користувача
+                    {tr('Запросити користувача', 'Invite user')}
                 </Button>
             </Box>
 
@@ -112,11 +115,11 @@ export default function AdminUsers() {
                 <Table>
                     <TableHead sx={{ bgcolor: 'rgba(255, 255, 255, 0.02)' }}>
                         <TableRow>
-                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>Користувач</TableCell>
+                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>{tr('Користувач', 'User')}</TableCell>
                             <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>Email</TableCell>
-                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>Роль</TableCell>
-                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>Прогрес</TableCell>
-                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>Дата реєстрації</TableCell>
+                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>{tr('Роль', 'Role')}</TableCell>
+                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>{tr('Прогрес', 'Progress')}</TableCell>
+                            <TableCell sx={{ color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700, borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>{tr('Дата реєстрації', 'Joined')}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -127,7 +130,7 @@ export default function AdminUsers() {
                                         <Avatar sx={{ bgcolor: user.role === 'ADMIN' ? '#fbbf24' : user.role === 'TEACHER' ? '#ec4899' : '#3b82f6', width: 32, height: 32, fontSize: '0.875rem' }}>
                                             {(user.name || user.email)[0].toUpperCase()}
                                         </Avatar>
-                                        <Typography sx={{ color: '#fff', fontWeight: 600 }}>{user.name || 'Анонім'}</Typography>
+                                        <Typography sx={{ color: '#fff', fontWeight: 600 }}>{user.name || tr('Анонім', 'Anonymous')}</Typography>
                                     </Box>
                                 </TableCell>
                                 <TableCell sx={{ color: 'rgba(255, 255, 255, 0.6)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
@@ -158,7 +161,7 @@ export default function AdminUsers() {
                                 </TableCell>
                                 <TableCell sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
                                     <Chip 
-                                        label={`${user.progress?.length || 0} уроків`} 
+                                        label={`${user.progress?.length || 0} ${tr('уроків', 'lessons')}`} 
                                         size="small" 
                                         sx={{ 
                                             bgcolor: alpha('#10b981', 0.1), 
@@ -169,7 +172,7 @@ export default function AdminUsers() {
                                     />
                                 </TableCell>
                                 <TableCell sx={{ color: 'rgba(255, 255, 255, 0.4)', fontSize: '0.8rem', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                                    {new Date(user.createdAt).toLocaleDateString('uk-UA')}
+                                    {new Date(user.createdAt).toLocaleDateString(locale)}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -185,14 +188,14 @@ export default function AdminUsers() {
                     sx: { bgcolor: '#0f172a', borderRadius: 4, border: '1px solid rgba(255, 255, 255, 0.1)', width: '100%', maxWidth: 450 }
                 }}
             >
-                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>Запросити нового користувача</DialogTitle>
+                <DialogTitle sx={{ color: '#fff', fontWeight: 900 }}>{tr('Запросити нового користувача', 'Invite a new user')}</DialogTitle>
                 <DialogContent>
                     <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mb: 3 }}>
-                        Новий користувач отримає лист на електронну пошту з посиланням для створення акаунта та встановлення пароля.
+                        {tr('Новий користувач отримає лист на електронну пошту з посиланням для створення акаунта та встановлення пароля.', 'The new user will receive an email with a link to create their account and set a password.')}
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                         <TextField
-                            label="Email користувача"
+                            label={tr('Email користувача', 'User email')}
                             fullWidth
                             type="email"
                             value={inviteData.email}
@@ -203,10 +206,10 @@ export default function AdminUsers() {
                             }}
                         />
                         <FormControl fullWidth>
-                            <InputLabel sx={{ color: 'rgba(255,255,255,0.5)' }}>Роль</InputLabel>
+                            <InputLabel sx={{ color: 'rgba(255,255,255,0.5)' }}>{tr('Роль', 'Role')}</InputLabel>
                             <Select
                                 value={inviteData.role}
-                                label="Роль"
+                                label={tr('Роль', 'Role')}
                                 onChange={(e) => setInviteData({ ...inviteData, role: e.target.value })}
                                 sx={{ 
                                     color: '#fff', 
@@ -214,22 +217,22 @@ export default function AdminUsers() {
                                     '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' }
                                 }}
                             >
-                                <MenuItem value="STUDENT">Студент</MenuItem>
-                                <MenuItem value="TEACHER">Викладач</MenuItem>
-                                <MenuItem value="ADMIN">Адміністратор</MenuItem>
+                                <MenuItem value="STUDENT">{tr('Студент', 'Student')}</MenuItem>
+                                <MenuItem value="TEACHER">{tr('Викладач', 'Teacher')}</MenuItem>
+                                <MenuItem value="ADMIN">{tr('Адміністратор', 'Administrator')}</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ p: 3, pt: 1 }}>
-                    <Button onClick={() => setIsInviteOpen(false)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>Скасувати</Button>
+                    <Button onClick={() => setIsInviteOpen(false)} sx={{ color: 'rgba(255, 255, 255, 0.5)', textTransform: 'none' }}>{tr('Скасувати', 'Cancel')}</Button>
                     <Button 
                         variant="contained" 
                         onClick={handleInvite} 
                         disabled={!inviteData.email}
                         sx={{ bgcolor: '#3b82f6', borderRadius: 2, px: 3, textTransform: 'none', fontWeight: 700 }}
                     >
-                        Надіслати запрошення
+                        {tr('Надіслати запрошення', 'Send invitation')}
                     </Button>
                 </DialogActions>
             </Dialog>

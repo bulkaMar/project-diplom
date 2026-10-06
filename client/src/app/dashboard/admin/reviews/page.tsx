@@ -7,10 +7,13 @@ import {
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
+import { useT, useLocale } from '@/lib/i18n';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 export default function AdminReviews() {
+    const tr = useT();
+    const locale = useLocale();
     const { token } = useAuth();
     const [reviews, setReviews] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -38,7 +41,7 @@ export default function AdminReviews() {
             {reviews.length === 0 ? (
                 <Grid size={12}>
                     <Typography sx={{ color: 'rgba(255,255,255,0.5)', textAlign: 'center', py: 8 }}>
-                        Відгуків поки що немає.
+                        {tr('Відгуків поки що немає.', 'No reviews yet.')}
                     </Typography>
                 </Grid>
             ) : (
@@ -63,7 +66,7 @@ export default function AdminReviews() {
                                         </Avatar>
                                         <Box>
                                             <Typography sx={{ color: '#fff', fontWeight: 700 }}>
-                                                {review.user?.name || 'Анонім'}
+                                                {review.user?.name || tr('Анонім', 'Anonymous')}
                                             </Typography>
                                             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)' }}>
                                                 {review.user?.email}
@@ -83,12 +86,12 @@ export default function AdminReviews() {
                                 />
 
                                 <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', fontStyle: review.comment ? 'normal' : 'italic' }}>
-                                    {review.comment || 'Без текстового коментаря'}
+                                    {review.comment || tr('Без текстового коментаря', 'No written comment')}
                                 </Typography>
 
                                 <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid rgba(255, 255, 255, 0.05)', display: 'flex', justifyContent: 'flex-end' }}>
                                     <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)' }}>
-                                        {new Date(review.createdAt).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                        {new Date(review.createdAt).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })}
                                     </Typography>
                                 </Box>
                             </Paper>

@@ -14,6 +14,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useT } from '@/lib/i18n';
 
 interface Lesson {
     id: string;
@@ -42,14 +43,15 @@ interface DifficultyTabsProps {
 }
 
 const LEVELS = [
-    { key: 'BASIC', label: 'Базовий', id: '01' },
-    { key: 'STANDARD', label: 'Стандартний', id: '02' },
-    { key: 'ADVANCED', label: 'Просунутий', id: '03' },
+    { key: 'BASIC', label: 'Базовий', labelEn: 'Basic', id: '01' },
+    { key: 'STANDARD', label: 'Стандартний', labelEn: 'Standard', id: '02' },
+    { key: 'ADVANCED', label: 'Просунутий', labelEn: 'Advanced', id: '03' },
 ] as const;
 
 type DifficultyKey = typeof LEVELS[number]['key'];
 
 export default function DifficultyTabs({ data }: DifficultyTabsProps) {
+    const tr = useT();
     const router = useRouter();
     
     // Filter out levels that have no lessons
@@ -95,7 +97,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
     if (visibleLevels.length === 0) {
         return (
             <Box sx={{ p: 4, textAlign: 'center', bgcolor: '#0f172a', borderRadius: 4 }}>
-                <Typography sx={{ color: 'text.secondary' }}>У цьому модулі ще немає завдань.</Typography>
+                <Typography sx={{ color: 'text.secondary' }}>{tr('У цьому модулі ще немає завдань.', 'This module has no tasks yet.')}</Typography>
             </Box>
         );
     }
@@ -105,7 +107,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
             {/* Header Info */}
             <Box sx={{ mb: 3 }}>
                 <Typography variant="overline" sx={{ color: '#3b82f6', fontWeight: 700, letterSpacing: 1 }}>
-                    МОДУЛЬ • {visibleLevels.length} {visibleLevels.length === 1 ? 'РІВЕНЬ' : 'РІВНІ'}
+                    {tr('МОДУЛЬ', 'MODULE')} • {visibleLevels.length} {visibleLevels.length === 1 ? tr('РІВЕНЬ', 'LEVEL') : tr('РІВНІ', 'LEVELS')}
                 </Typography>
             </Box>
 
@@ -138,7 +140,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
                             >
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                                     <Typography variant="caption" sx={{ color: isActive ? '#3b82f6' : 'text.secondary', fontWeight: 700, letterSpacing: 1 }}>
-                                        РІВЕНЬ {level.id}
+                                        {tr('РІВЕНЬ', 'LEVEL')} {level.id}
                                     </Typography>
                                     {levelInfo.completed ? (
                                         <EmojiEventsIcon sx={{ color: '#fbbf24', fontSize: 20 }} />
@@ -147,7 +149,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
                                     ) : null}
                                 </Box>
                                 <Typography variant="h6" sx={{ fontWeight: 700, color: isActive ? '#fff' : 'rgba(255,255,255,0.7)', mb: 1 }}>
-                                    {level.label}
+                                    {tr(level.label, level.labelEn)}
                                 </Typography>
 
                                 {isActive && (
@@ -175,10 +177,10 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
                     </Box>
                     <Box>
                         <Typography variant="subtitle2" sx={{ color: '#10b981', fontWeight: 700 }}>
-                            Вітаємо! Ви опанували цей рівень
+                            {tr('Вітаємо! Ви опанували цей рівень', 'Congratulations! You’ve mastered this level')}
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'rgba(16, 185, 129, 0.8)' }}>
-                            Всі завдання виконано успішно. Ви готові до наступного етапу.
+                            {tr('Всі завдання виконано успішно. Ви готові до наступного етапу.', 'All tasks completed. You’re ready for the next stage.')}
                         </Typography>
                     </Box>
                 </Box>
@@ -186,7 +188,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
 
             {/* Task List Section */}
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 3, mt: 2, color: '#fff' }}>
-                Список завдань
+                {tr('Список завдань', 'Tasks')}
             </Typography>
 
             <AnimatePresence mode="wait">
@@ -244,17 +246,17 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
                                         }
                                         secondary={
                                             <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                                {lesson.type === 'THEORY' ? 'КОНСПЕКТ' :
-                                                    lesson.type === 'PRACTICE' ? 'ПРАКТИКА' : 'ТЕСТ'}
+                                                {lesson.type === 'THEORY' ? tr('КОНСПЕКТ', 'NOTES') :
+                                                    lesson.type === 'PRACTICE' ? tr('ПРАКТИКА', 'PRACTICE') : tr('ТЕСТ', 'QUIZ')}
                                                 {' • '}
-                                                {lesson.type === 'THEORY' ? '10 хв' :
-                                                    lesson.type === 'PRACTICE' ? '20 хв' : '15 хв'}
+                                                {lesson.type === 'THEORY' ? tr('10 хв', '10 min') :
+                                                    lesson.type === 'PRACTICE' ? tr('20 хв', '20 min') : tr('15 хв', '15 min')}
                                             </Typography>
                                         }
                                     />
                                     {lesson.isCompleted ? (
                                         <Chip
-                                            label={lesson.score !== null ? `Виконано (${lesson.score}%)` : "Виконано"}
+                                            label={lesson.score !== null ? `${tr('Виконано', 'Done')} (${lesson.score}%)` : tr('Виконано', 'Done')}
                                             size="small"
                                             sx={{
                                                 bgcolor: 'rgba(16, 185, 129, 0.1)',
@@ -268,7 +270,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
                                         />
                                     ) : lesson.score !== null ? (
                                         <Chip
-                                            label={`Зафейлено (${lesson.score}%)`}
+                                            label={`${tr('Зафейлено', 'Failed')} (${lesson.score}%)`}
                                             size="small"
                                             sx={{
                                                 bgcolor: 'rgba(239, 68, 68, 0.1)',
@@ -291,7 +293,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
             {/* Footer Logic (Hint) */}
             <Box sx={{ mt: 5, pt: 3, borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.3)', fontStyle: 'italic', fontWeight: 500 }}>
-                    Наступний рівень стане доступним після завершення поточного
+                    {tr('Наступний рівень стане доступним після завершення поточного', 'The next level unlocks once you finish the current one')}
                 </Typography>
 
                 {data.BASIC.completed && (
@@ -308,7 +310,7 @@ export default function DifficultyTabs({ data }: DifficultyTabsProps) {
                             textTransform: 'none'
                         }}
                     >
-                        До наступного модуля
+                        {tr('До наступного модуля', 'Next module')}
                     </Button>
                 )}
             </Box>

@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import CodeIcon from '@mui/icons-material/Code';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import { useT } from '@/lib/i18n';
 
 interface TheoryEditorProps {
     courseTitle: string;
@@ -79,6 +80,7 @@ export default function TheoryEditor({
     onContentChange, onReadTimeChange, onDifficultyChange, onTipsChange,
     onModuleTitleChange, onSave, saving
 }: TheoryEditorProps) {
+    const tr = useT();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [newTip, setNewTip] = useState('');
     const [showTips, setShowTips] = useState(false);
@@ -115,7 +117,7 @@ export default function TheoryEditor({
                             value={moduleTitle}
                             onChange={(e) => onModuleTitleChange(e.target.value)}
                             className="bg-transparent border-none p-0 text-xl font-bold text-on-surface focus:ring-0 w-80"
-                            placeholder="Назва модуля..."
+                            placeholder={tr('Назва модуля...', 'Module title...')}
                         />
                     </div>
                 </div>
@@ -130,7 +132,7 @@ export default function TheoryEditor({
                                 onChange={(e) => onReadTimeChange(parseInt(e.target.value) || 0)}
                                 className="w-10 bg-transparent border-b border-outline-variant/20 hover:border-primary text-center focus:outline-none"
                             />
-                            <span>хв</span>
+                            <span>{tr('хв', 'min')}</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <span className="material-symbols-outlined text-sm">trending_up</span>
@@ -139,9 +141,9 @@ export default function TheoryEditor({
                                 onChange={(e) => onDifficultyChange(e.target.value)}
                                 className="bg-transparent border-none text-primary cursor-pointer focus:ring-0 outline-none"
                             >
-                                <option value="BASIC">Початковий</option>
-                                <option value="STANDARD">Середній</option>
-                                <option value="ADVANCED">Просунутий</option>
+                                <option value="BASIC">{tr('Початковий', 'Basic')}</option>
+                                <option value="STANDARD">{tr('Середній', 'Standard')}</option>
+                                <option value="ADVANCED">{tr('Просунутий', 'Advanced')}</option>
                             </select>
                         </div>
                     </div>
@@ -149,7 +151,7 @@ export default function TheoryEditor({
                     <button 
                         onClick={() => setShowTips(!showTips)}
                         className={`p-2 rounded-lg transition-colors ${showTips ? 'bg-tertiary/20 text-tertiary' : 'text-outline-variant hover:bg-surface-container'}`}
-                        title="Технічні поради"
+                        title={tr('Технічні поради', 'Pro tips')}
                     >
                         <span className="material-symbols-outlined">lightbulb</span>
                     </button>
@@ -160,7 +162,7 @@ export default function TheoryEditor({
                         className="px-6 py-2 bg-primary text-on-primary font-bold rounded-lg hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] active:scale-95 transition-all text-sm flex items-center gap-2"
                     >
                         {saving ? <CircularProgress size={16} color="inherit" /> : <span className="material-symbols-outlined text-sm">save</span>}
-                        Зберегти
+                        {tr('Зберегти', 'Save')}
                     </button>
                 </div>
             </div>
@@ -171,13 +173,13 @@ export default function TheoryEditor({
                 <div className="flex-1 border-r border-outline-variant/10 flex flex-col bg-surface-dim/30">
                     {/* Toolbar */}
                     <div className="flex gap-1 p-3 border-bottom border-outline-variant/10 bg-[#0b1325]/50 flex-wrap">
-                        <button onClick={() => insertMarkdown('**', '**')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title="Жирний"><span className="material-symbols-outlined text-outline text-lg">format_bold</span></button>
-                        <button onClick={() => insertMarkdown('*', '*')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title="Курсив"><span className="material-symbols-outlined text-outline text-lg">format_italic</span></button>
-                        <button onClick={() => insertMarkdown('[', '](url)')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title="Посилання"><span className="material-symbols-outlined text-outline text-lg">link</span></button>
+                        <button onClick={() => insertMarkdown('**', '**')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title={tr('Жирний', 'Bold')}><span className="material-symbols-outlined text-outline text-lg">format_bold</span></button>
+                        <button onClick={() => insertMarkdown('*', '*')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title={tr('Курсив', 'Italic')}><span className="material-symbols-outlined text-outline text-lg">format_italic</span></button>
+                        <button onClick={() => insertMarkdown('[', '](url)')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title={tr('Посилання', 'Link')}><span className="material-symbols-outlined text-outline text-lg">link</span></button>
                         <div className="w-px h-6 bg-outline-variant/10 mx-1 self-center"></div>
-                        <button onClick={() => insertMarkdown('## ')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title="Заголовок"><span className="material-symbols-outlined text-outline text-lg">title</span></button>
-                        <button onClick={() => insertMarkdown('- ')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title="Список"><span className="material-symbols-outlined text-outline text-lg">format_list_bulleted</span></button>
-                        <button onClick={() => insertMarkdown('```cpp\n', '\n```')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title="Код"><span className="material-symbols-outlined text-outline text-lg">code</span></button>
+                        <button onClick={() => insertMarkdown('## ')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title={tr('Заголовок', 'Heading')}><span className="material-symbols-outlined text-outline text-lg">title</span></button>
+                        <button onClick={() => insertMarkdown('- ')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title={tr('Список', 'List')}><span className="material-symbols-outlined text-outline text-lg">format_list_bulleted</span></button>
+                        <button onClick={() => insertMarkdown('```cpp\n', '\n```')} className="p-2 hover:bg-surface-container rounded-md transition-colors" title={tr('Код', 'Code')}><span className="material-symbols-outlined text-outline text-lg">code</span></button>
                     </div>
 
                     <textarea 
@@ -185,13 +187,13 @@ export default function TheoryEditor({
                         value={content}
                         onChange={(e) => onContentChange(e.target.value)}
                         className="flex-1 w-full bg-transparent border-none focus:ring-0 p-8 text-lg leading-relaxed text-on-surface/90 font-body resize-none scrollbar-thin overflow-y-auto"
-                        placeholder="Почніть писати урок..."
+                        placeholder={tr('Почніть писати урок...', 'Start writing the lesson...')}
                     />
                 </div>
 
                 {/* Preview Side */}
                 <div className="flex-1 bg-[#0d172a] overflow-y-auto scrollbar-thin relative border-r border-outline-variant/10">
-                    <div className="absolute top-4 right-4 text-[10px] font-bold text-outline-variant tracking-widest uppercase opacity-40">Прев'ю в реальному часі</div>
+                    <div className="absolute top-4 right-4 text-[10px] font-bold text-outline-variant tracking-widest uppercase opacity-40">{tr('Прев\'ю в реальному часі', 'Live preview')}</div>
                     <div className="max-w-2xl mx-auto px-10 py-16">
                         <Box sx={{ 
                             '& p': { color: '#94a3b8', fontSize: '1.05rem', lineHeight: 1.8, mb: 3 },
@@ -216,7 +218,7 @@ export default function TheoryEditor({
                                     blockquote: ({ children }) => <ProTipPreview>{children}</ProTipPreview>,
                                 }}
                             >
-                                {content || '*Контент ще не додано...*'}
+                                {content || tr('*Контент ще не додано...*', '*No content yet...*')}
                             </ReactMarkdown>
                         </Box>
                     </div>
@@ -228,14 +230,14 @@ export default function TheoryEditor({
                         <div className="flex items-center justify-between mb-8">
                             <h4 className="font-bold text-on-surface flex items-center gap-2">
                                 <span className="material-symbols-outlined text-tertiary text-lg">lightbulb</span>
-                                Технічні поради
+                                {tr('Технічні поради', 'Pro tips')}
                             </h4>
                             <button onClick={() => setShowTips(false)} className="text-outline-variant hover:text-on-surface"><span className="material-symbols-outlined text-sm">close</span></button>
                         </div>
 
                         <div className="flex-1 overflow-y-auto space-y-4 mb-6 pr-2 scrollbar-thin">
                             {tips.length === 0 ? (
-                                <p className="text-xs text-outline italic">Порад ще немає...</p>
+                                <p className="text-xs text-outline italic">{tr('Порад ще немає...', 'No tips yet...')}</p>
                             ) : (
                                 tips.map((tip, index) => (
                                     <div key={index} className="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10 group relative">
@@ -255,12 +257,12 @@ export default function TheoryEditor({
                             <textarea 
                                 value={newTip}
                                 onChange={(e) => setNewTip(e.target.value)}
-                                placeholder="Нова порада..."
+                                placeholder={tr('Нова порада...', 'New tip...')}
                                 className="w-full bg-surface-dim border border-outline-variant/20 rounded-xl p-3 text-xs text-on-surface focus:ring-1 focus:ring-tertiary resize-none mb-3 scrollbar-hide"
                                 rows={3}
                             />
                             <button onClick={handleAddTip} className="w-full py-2.5 bg-tertiary text-on-tertiary text-xs font-bold rounded-xl hover:bg-tertiary-fixed transition-all flex items-center justify-center gap-2 uppercase tracking-widest shadow-lg shadow-tertiary/10">
-                                <span className="material-symbols-outlined text-sm">add</span> Додати
+                                <span className="material-symbols-outlined text-sm">add</span> {tr('Додати', 'Add')}
                             </button>
                         </div>
                     </div>

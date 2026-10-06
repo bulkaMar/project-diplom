@@ -3,6 +3,7 @@
 import React from 'react';
 import Editor from '@monaco-editor/react';
 import { CircularProgress, Tooltip, IconButton } from '@mui/material';
+import { useT } from '@/lib/i18n';
 
 interface TestCase {
     id?: string;
@@ -41,11 +42,12 @@ export default function PracticeEditor({
     onSave,
     saving
 }: PracticeEditorProps) {
+const tr = useT();
 
     const addTestCase = () => {
         onTestCasesChange([...testCases, { 
             id: Math.random().toString(36).substr(2, 9),
-            name: `Тест #${testCases.length + 1}`,
+            name: `${tr('Тест', 'Test')} #${testCases.length + 1}`,
             input: '', 
             output: '',
             points: 10, // Hidden but kept for consistency
@@ -68,7 +70,7 @@ export default function PracticeEditor({
             {/* Header Section */}
             <div className="px-8 py-5 flex items-center justify-between border-b border-outline-variant/10 bg-[#0b1325]">
                 <div>
-                    <span className="text-[10px] text-outline font-bold uppercase tracking-widest">{courseTitle} • ПРАКТИКА</span>
+                    <span className="text-[10px] text-outline font-bold uppercase tracking-widest">{courseTitle} • {tr('ПРАКТИКА', 'PRACTICE')}</span>
                     <h1 className="headline-font text-2xl font-bold text-on-surface">C++ Practice Studio</h1>
                 </div>
                 <div className="flex items-center gap-4">
@@ -78,7 +80,7 @@ export default function PracticeEditor({
                         className="px-8 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
                     >
                         {saving ? <CircularProgress size={16} color="inherit" /> : <span className="material-symbols-outlined text-sm">save</span>}
-                        Зберегти Завдання
+                        {tr('Зберегти Завдання', 'Save task')}
                     </button>
                 </div>
             </div>
@@ -91,25 +93,25 @@ export default function PracticeEditor({
                         <section className="space-y-4">
                             <h3 className="headline-font font-bold text-on-surface flex items-center gap-2">
                                 <span className="material-symbols-outlined text-primary">description</span>
-                                Умова задачі
+                                {tr('Умова задачі', 'Task statement')}
                             </h3>
                             <textarea 
                                 value={taskDescription}
                                 onChange={(e) => onDescriptionChange(e.target.value)}
                                 className="w-full bg-[#0b1325] border border-outline-variant/10 rounded-xl p-6 text-on-surface leading-relaxed min-h-[300px] resize-none text-md focus:ring-1 focus:ring-primary/40 scrollbar-hide" 
-                                placeholder="Опишіть завдання (підтримується Markdown)..."
+                                placeholder={tr('Опишіть завдання (підтримується Markdown)...', 'Describe the task (Markdown supported)...')}
                             />
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-[10px] font-bold text-outline tracking-widest uppercase mb-2">Складність</label>
+                                    <label className="block text-[10px] font-bold text-outline tracking-widest uppercase mb-2">{tr('Складність', 'Difficulty')}</label>
                                     <select 
                                         value={difficulty}
                                         onChange={(e) => onDifficultyChange(e.target.value)}
                                         className="w-full bg-[#0b1325] border border-outline-variant/10 rounded-lg text-sm text-on-surface focus:ring-primary/40 py-2 px-3"
                                     >
-                                        <option value="BASIC">Початкова</option>
-                                        <option value="STANDARD">Середня</option>
-                                        <option value="ADVANCED">Просунута</option>
+                                        <option value="BASIC">{tr('Початкова', 'Basic')}</option>
+                                        <option value="STANDARD">{tr('Середня', 'Standard')}</option>
+                                        <option value="ADVANCED">{tr('Просунута', 'Advanced')}</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,11 +124,11 @@ export default function PracticeEditor({
                             <div className="flex items-center justify-between">
                                 <h3 className="headline-font font-bold text-on-surface flex items-center gap-2">
                                     <span className="material-symbols-outlined text-primary">data_check</span>
-                                    Менеджер тестів
+                                    {tr('Менеджер тестів', 'Test manager')}
                                 </h3>
                                 <div className="flex gap-2">
                                     <button onClick={addTestCase} className="text-xs font-bold text-primary hover:bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 flex items-center gap-2 transition-all">
-                                        <span className="material-symbols-outlined text-sm">add_circle</span> Додати тест
+                                        <span className="material-symbols-outlined text-sm">add_circle</span> {tr('Додати тест', 'Add test')}
                                     </button>
                                 </div>
                             </div>
@@ -140,7 +142,7 @@ export default function PracticeEditor({
                                                     value={tc.name}
                                                     onChange={(e) => updateTestCase(index, { name: e.target.value })}
                                                     className="bg-transparent border-none p-0 text-sm font-bold text-on-surface focus:ring-0 w-40"
-                                                    placeholder="Назва тесту..."
+                                                    placeholder={tr('Назва тесту...', 'Test name...')}
                                                 />
                                             </div>
                                             <button onClick={() => deleteTestCase(index)} className="opacity-0 group-hover:opacity-100 text-outline hover:text-error transition-all">
@@ -149,7 +151,7 @@ export default function PracticeEditor({
                                         </div>
                                         <div className="p-5 grid grid-cols-2 gap-5">
                                             <div className="space-y-2">
-                                                <label className="block text-[9px] font-bold text-outline uppercase tracking-widest pl-1">Вхідні дані (Input)</label>
+                                                <label className="block text-[9px] font-bold text-outline uppercase tracking-widest pl-1">{tr('Вхідні дані (Input)', 'Input')}</label>
                                                 <textarea 
                                                     value={tc.input}
                                                     onChange={(e) => updateTestCase(index, { input: e.target.value })}
@@ -158,7 +160,7 @@ export default function PracticeEditor({
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <label className="block text-[9px] font-bold text-outline uppercase tracking-widest pl-1">Очікуваний результат (Output)</label>
+                                                <label className="block text-[9px] font-bold text-outline uppercase tracking-widest pl-1">{tr('Очікуваний результат (Output)', 'Expected output')}</label>
                                                 <textarea 
                                                     value={tc.output}
                                                     onChange={(e) => updateTestCase(index, { output: e.target.value })}
@@ -173,7 +175,7 @@ export default function PracticeEditor({
                                 {testCases.length === 0 && (
                                     <div className="py-20 text-center border-2 border-dashed border-outline-variant/10 rounded-2xl flex flex-col items-center gap-4 text-outline/40">
                                         <span className="material-symbols-outlined text-5xl">fact_check</span>
-                                        <p className="headline-font font-bold">Додайте перший тест для перевірки</p>
+                                        <p className="headline-font font-bold">{tr('Додайте перший тест для перевірки', 'Add the first test case')}</p>
                                     </div>
                                 )}
                             </div>
@@ -185,7 +187,7 @@ export default function PracticeEditor({
                 <div className="flex-1 flex flex-col bg-[#0d172a]">
                     <div className="bg-surface-container-high px-6 py-3 flex items-center justify-between border-b border-outline-variant/10">
                         <div className="flex items-center gap-4">
-                            <span className="text-[10px] font-bold text-on-surface uppercase tracking-widest headline-font">Шаблон коду</span>
+                            <span className="text-[10px] font-bold text-on-surface uppercase tracking-widest headline-font">{tr('Шаблон коду', 'Code template')}</span>
                         </div>
                     </div>
                     <div className="flex-1">
