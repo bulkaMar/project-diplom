@@ -89,11 +89,6 @@ export default function Home() {
       {/* ---------- HERO ---------- */}
       <section className={styles.hero}>
         <div className={styles.heroText}>
-          <motion.div variants={fadeUp} initial="hidden" animate="show" custom={0} className={styles.pill}>
-            <span className={styles.pillDot} />
-            {t.pill}
-          </motion.div>
-
           <motion.h1 variants={fadeUp} initial="hidden" animate="show" custom={1} className={styles.title}>
             {t.titleBefore} <span className={styles.gradient}>C++</span>
             <br />

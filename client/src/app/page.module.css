@@ -102,33 +102,6 @@
   min-width: 0;
 }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.45rem 1rem 0.45rem 0.8rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #c9d5ff;
-  background: rgba(91, 140, 255, 0.1);
-  border: 1px solid rgba(91, 140, 255, 0.28);
-  backdrop-filter: blur(8px);
-}
-
-.pillDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18);
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  50% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0.05); }
-}
-
 .title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(2.6rem, 5.4vw, 4.6rem);
@@ -857,5 +830,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blobA, .blobB, .blobC, .gradient, .marqueeTrack, .float, .pillDot { animation: none; }
+  .blobA, .blobB, .blobC, .gradient, .marqueeTrack, .float { animation: none; }
 }

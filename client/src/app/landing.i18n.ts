@@ -5,7 +5,6 @@ type Step = { icon: string; label: string; text: string };
 type Role = { icon: string; role: string; items: string[] };
 
 export interface LandingDict {
-  pill: string;
   titleBefore: string;
   titleAfter: string;
   subtitle: string;
@@ -40,7 +39,6 @@ export interface LandingDict {
 
 export const LANDING: Record<Lang, LandingDict> = {
   uk: {
-    pill: 'Дипломний проєкт · КНУ ім. Тараса Шевченка',
     titleBefore: 'Опануйте',
     titleAfter: 'пишучи справжній код',
     subtitle:
@@ -91,7 +89,6 @@ export const LANDING: Record<Lang, LandingDict> = {
     ctaButton: 'Створити акаунт',
   },
   en: {
-    pill: 'Diploma project · Taras Shevchenko National University of Kyiv',
     titleBefore: 'Master',
     titleAfter: 'by writing real\u00A0code',
     subtitle:
